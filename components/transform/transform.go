@@ -12,12 +12,16 @@ const (
 
 var Component = donburi.NewComponentType[Transform](Transform{
 	Position: m.NewVec2(0, 0),
+	Index:    0,
+
 	Rotation: 0,
 	Scale:    1.0,
 })
 
 type Transform struct {
 	Position m.Vec2
+	Index    int
+
 	Rotation float64
 	Scale    float64
 }

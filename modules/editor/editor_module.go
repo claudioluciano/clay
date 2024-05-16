@@ -7,6 +7,8 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
 	"github.com/leap-fish/clay"
+	"github.com/leap-fish/clay/modules/render"
+	"github.com/leap-fish/clay/modules/resources"
 	"github.com/leap-fish/clay/resource"
 	log "github.com/sirupsen/logrus"
 	"image/color"
@@ -45,16 +47,14 @@ func (e *EditorModule) Draw(screen *ebiten.Image) {
 }
 
 func (e *EditorModule) Ready(core *clay.Core) {
-	resourceErrs := resource.LoadFromEmbedFolder("assets", EditorFiles)
-	if len(resourceErrs) > 0 {
-		log.WithField("errors", resourceErrs).Errorf("Unable to load %d files from embedded file system", len(resourceErrs))
-	}
-
 	e.font = resource.Get[*text.GoTextFaceSource]("font:BaiJamjuree-Regular")
 }
 
 func (e *EditorModule) Build(core *clay.Core) {
-	log.Debug("Clay Editor starting")
+	core.Module(
+		resources.NewDefaultResourcesModule("assets", EditorFiles),
+		&render.DefaultRendererModule{},
+	)
 
 	core.LaunchOptions(clay.LaunchOptions{
 		WindowWidth:  *windowWidthFlag,

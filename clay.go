@@ -1,11 +1,14 @@
 package clay
 
 import (
+	"cmp"
 	"flag"
 	"github.com/hajimehoshi/ebiten/v2"
 	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/ecs"
+	"reflect"
+	"slices"
 )
 
 var levelFlag = flag.Int("logging", int(log.InfoLevel), "Sets the logging level of the engine in Logrus levels.")
@@ -18,8 +21,12 @@ type LaunchOptions struct {
 }
 
 type Core struct {
-	ECS     *ecs.ECS
-	Modules []Module
+	ECS *ecs.ECS
+
+	moduleTypes   []reflect.Type
+	builtModules  []reflect.Type
+	Modules       []Module
+	SortedModules []Module
 
 	Game *ClayGame
 
@@ -43,24 +50,71 @@ func New() *Core {
 }
 
 func (c *Core) Module(module ...Module) *Core {
-	c.Modules = append(c.Modules, module...)
+	for _, m := range module {
+		moduleType := reflect.TypeOf(m)
+		if slices.Contains(c.moduleTypes, moduleType) {
+			continue
+		}
+
+		log.Tracef("Add module %s", moduleType)
+		c.moduleTypes = append(c.moduleTypes, moduleType)
+		c.Modules = append(c.Modules, m)
+		break
+	}
+
+	c.SortedModules = c.sortModules()
+
+	c.Build()
 
 	return c
 }
 
+// LaunchOptions is used to configure the `LaunchOptions` structure used to define certain defaults.
 func (c *Core) LaunchOptions(options LaunchOptions) *Core {
 	c.options = &options
 	return c
 }
 
-func (c *Core) Run() {
+// SortedModules returns modules in sorted order according to their Order() function.
+func (c *Core) sortModules() []Module {
+	var modules []Module
+	modules = append(modules, c.Modules...)
+	slices.SortFunc(modules, func(a, b Module) int {
+		var aValue int
+		var bValue int
+
+		aOrdered, aOk := a.(Sortable)
+		if aOk {
+			aValue = aOrdered.Order()
+		}
+
+		bOrdered, bOk := b.(Sortable)
+		if bOk {
+			bValue = bOrdered.Order()
+		}
+
+		return cmp.Compare(aValue, bValue)
+	})
+	return modules
+}
+
+func (c *Core) Build() {
 	// Modules are the first things to get initialized
-	for _, module := range c.Modules {
+	for _, module := range c.SortedModules {
+		moduleType := reflect.TypeOf(module)
+		if slices.Contains(c.builtModules, moduleType) {
+			continue
+		}
+		c.builtModules = append(c.builtModules, moduleType)
 		module.Build(c)
 	}
+}
+
+func (c *Core) Run() {
+	log.Trace("Clay: Run()")
 
 	// After all modules are built, run the `Ready` function
-	for _, module := range c.Modules {
+	for _, module := range c.SortedModules {
 		module.Ready(c)
 	}
 

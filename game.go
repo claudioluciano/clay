@@ -13,7 +13,7 @@ type ClayGame struct {
 }
 
 func (g *ClayGame) Update() error {
-	for _, m := range g.Core.Modules {
+	for _, m := range g.Core.SortedModules {
 		dt := time.Second / time.Duration(ebiten.TPS())
 		m.Update(dt)
 	}
@@ -22,7 +22,7 @@ func (g *ClayGame) Update() error {
 }
 
 func (g *ClayGame) Draw(screen *ebiten.Image) {
-	for _, m := range g.Core.Modules {
+	for _, m := range g.Core.SortedModules {
 		m.Draw(screen)
 	}
 }

@@ -11,3 +11,7 @@ type Module interface {
 	Update(dt time.Duration)
 	Draw(screen *ebiten.Image)
 }
+
+type Sortable interface {
+	Order() int
+}
