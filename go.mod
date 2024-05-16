@@ -2,9 +2,9 @@ module github.com/leap-fish/clay
 
 go 1.22.1
 
-require github.com/yohamta/donburi v1.4.2
 
 require (
+	github.com/yohamta/donburi v1.4.2
 	github.com/hajimehoshi/ebiten/v2 v2.7.3
 	github.com/sirupsen/logrus v1.9.3
 )

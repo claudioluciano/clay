@@ -1,8 +1,8 @@
 package editor
 
 import (
-	"clay"
 	"flag"
+	"github.com/leap-fish/clay"
 	log "github.com/sirupsen/logrus"
 	"os"
 )
