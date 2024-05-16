@@ -9,40 +9,35 @@ import (
 )
 
 var levelFlag = flag.Int("logging", int(log.InfoLevel), "Sets the logging level of the engine in Logrus levels.")
+var loggingColors = flag.Bool("logcolors", false, "Whether logging will have colors enabled")
 
 type LaunchOptions struct {
 	WindowWidth  int
 	WindowHeight int
+	RenderScale  int
 }
 
 type Core struct {
 	ECS     *ecs.ECS
 	Modules []Module
 
+	Game *ClayGame
+
 	options *LaunchOptions
-}
-
-func (c *Core) Update() error {
-	return nil
-}
-
-func (c *Core) Draw(screen *ebiten.Image) {
-}
-
-func (c *Core) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return outsideWidth, outsideHeight
 }
 
 func New() *Core {
 	flag.Parse()
 
 	log.SetLevel(log.Level(*levelFlag))
+	log.SetFormatter(&log.TextFormatter{ForceColors: *loggingColors})
 
 	return &Core{
 		ECS: ecs.NewECS(donburi.NewWorld()),
 		options: &LaunchOptions{
 			WindowWidth:  800,
 			WindowHeight: 600,
+			RenderScale:  1.0,
 		},
 	}
 }
@@ -61,14 +56,25 @@ func (c *Core) LaunchOptions(options LaunchOptions) *Core {
 func (c *Core) Run() {
 	// Modules are the first things to get initialized
 	for _, module := range c.Modules {
-		module.Init(c)
+		module.Build(c)
+	}
+
+	// After all modules are built, run the `Ready` function
+	for _, module := range c.Modules {
+		module.Ready(c)
 	}
 
 	// Defaults
 	ebiten.SetWindowSize(c.options.WindowWidth, c.options.WindowHeight)
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 
-	err := ebiten.RunGame(c)
+	// Initializes the game instance
+	c.Game = &ClayGame{
+		RenderScale: 1.0,
+		Core:        c,
+	}
+
+	err := ebiten.RunGame(c.Game)
 	if err != nil {
 		panic(err)
 	}

@@ -8,6 +8,6 @@ import (
 
 func main() {
 	c := clay.New()
-	c.Module(&editor.EditorModule{}, &resources.ResourceModule{})
+	c.Module(&editor.EditorModule{}, &resources.DefaultResourcesModule{})
 	c.Run()
 }

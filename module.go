@@ -1,5 +1,13 @@
 package clay
 
+import (
+	"github.com/hajimehoshi/ebiten/v2"
+	"time"
+)
+
 type Module interface {
-	Init(core *Core)
+	Build(core *Core)
+	Ready(core *Core)
+	Update(dt time.Duration)
+	Draw(screen *ebiten.Image)
 }
