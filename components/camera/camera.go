@@ -4,9 +4,21 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/features/math"
+	"github.com/yohamta/donburi/filter"
 )
 
 var Component = donburi.NewComponentType[Camera]()
+var Query = donburi.NewQuery(filter.Contains(Component))
+
+func GetCamera(w donburi.World) *Camera {
+	camEntry, ok := Query.First(w)
+	if !ok || camEntry == nil {
+		return nil
+	}
+
+	cam := Component.Get(camEntry)
+	return cam
+}
 
 // Camera can look at positions and zoom.
 // The Camera implementation is a modified https://github.com/MelonFunction/ebiten-camera.

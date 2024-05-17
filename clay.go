@@ -59,7 +59,6 @@ func (c *Core) Module(module ...Module) *Core {
 		log.Tracef("Add module %s", moduleType)
 		c.moduleTypes = append(c.moduleTypes, moduleType)
 		c.Modules = append(c.Modules, m)
-		break
 	}
 
 	c.SortedModules = c.sortModules()
