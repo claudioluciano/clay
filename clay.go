@@ -101,6 +101,7 @@ func (c *Core) Run() {
 		World:       c.World,
 	}
 
+	c.Game.Init()
 	err := ebiten.RunGame(c.Game)
 	if err != nil {
 		panic(err)

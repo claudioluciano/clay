@@ -4,21 +4,9 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/features/math"
-	"github.com/yohamta/donburi/filter"
 )
 
 var Component = donburi.NewComponentType[Camera]()
-var Query = donburi.NewQuery(filter.Contains(Component))
-
-func GetCamera(w donburi.World) *Camera {
-	camEntry, ok := Query.First(w)
-	if !ok || camEntry == nil {
-		return nil
-	}
-
-	cam := Component.Get(camEntry)
-	return cam
-}
 
 // Camera can look at positions and zoom.
 // The Camera implementation is a modified https://github.com/MelonFunction/ebiten-camera.
@@ -116,6 +104,10 @@ func (c *Camera) GetCursorCoords() (float64, float64) {
 
 // WorldMatrix modifies the `ops` parameter to be world relative.
 func (c *Camera) WorldMatrix(ops *ebiten.DrawImageOptions) {
+	if c.Scale == 0 {
+		c.Scale = 1.0
+	}
+
 	centerX, centerY := c.Center()
 	ops.GeoM.Scale(c.Scale, c.Scale)
 	ops.GeoM.Translate(centerX, centerY)

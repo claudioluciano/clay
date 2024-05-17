@@ -1,4 +1,4 @@
-package transform
+package spatial
 
 import (
 	"github.com/yohamta/donburi"
@@ -10,7 +10,7 @@ const (
 	radianRotationOffsetHalfCircle = math.Pi / 2
 )
 
-var Component = donburi.NewComponentType[Transform](Transform{
+var TransformComponent = donburi.NewComponentType[Transform](Transform{
 	Position: m.NewVec2(0, 0),
 	Index:    0,
 

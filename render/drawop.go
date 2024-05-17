@@ -7,7 +7,7 @@ import (
 
 type DrawOp struct {
 	mode  RenderMode
-	layer int
+	index int
 
 	scale    float64
 	rotation float64
@@ -27,11 +27,11 @@ type DrawOp struct {
 // By using Draw instead of manual ebiten drawing, you get automatic handling of rotations and sprite origins.
 // DrawOp makes sure the draw operations are performed in the correct order.
 // Call QueueRender() to draw onto the render pass.
-func Draw(image *ebiten.Image, mode RenderMode, layer int) *DrawOp {
+func Draw(image *ebiten.Image, mode RenderMode, index int) *DrawOp {
 	return &DrawOp{
 		scale: 1.0,
 
-		layer: layer,
+		index: index,
 		image: image,
 		mode:  mode,
 

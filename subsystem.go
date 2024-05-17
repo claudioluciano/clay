@@ -2,8 +2,6 @@ package clay
 
 import (
 	"cmp"
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/leap-fish/clay/components/camera"
 	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
 	"reflect"
@@ -18,7 +16,7 @@ type Initializable interface {
 }
 
 type Renderable interface {
-	Render(w donburi.World, img *ebiten.Image, cam *camera.Camera)
+	Render(rg *RenderGraph, w donburi.World)
 }
 
 type Updatable interface {

@@ -2,13 +2,11 @@ package resources
 
 import (
 	"embed"
-	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/leap-fish/clay"
 	"github.com/leap-fish/clay/plugins/resources/defaults"
 	"github.com/leap-fish/clay/resource"
 	log "github.com/sirupsen/logrus"
 	"math"
-	"time"
 )
 
 type DefaultResourcesPlugin struct {
@@ -42,10 +40,4 @@ func (r *DefaultResourcesPlugin) Ready(core *clay.Core) {
 			WithField("fs", r.FileSystem).
 			Errorf("Unable to load %d files from embedded file system", len(resourceErrs))
 	}
-}
-
-func (r *DefaultResourcesPlugin) Update(dt time.Duration) {
-}
-
-func (r *DefaultResourcesPlugin) Draw(screen *ebiten.Image) {
 }

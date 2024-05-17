@@ -2,9 +2,10 @@ package render
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/leap-fish/clay"
 	"github.com/leap-fish/clay/components/camera"
+	"github.com/leap-fish/clay/components/spatial"
 	"github.com/leap-fish/clay/components/sprite"
-	"github.com/leap-fish/clay/components/transform"
 	"github.com/leap-fish/clay/render"
 	"github.com/leap-fish/clay/resource"
 	"github.com/yohamta/donburi"
@@ -22,19 +23,21 @@ func NewDefaultImageSystem() *DefaultImageSystem {
 	}
 }
 
-func (s DefaultImageSystem) Render(w donburi.World, img *ebiten.Image, cam *camera.Camera) {
+func (s DefaultImageSystem) Render(rg *clay.RenderGraph, w donburi.World) {
 	s.imageQuery.Each(w, func(entry *donburi.Entry) {
 		spr := sprite.Component.Get(entry)
-		tf := transform.Component.Get(entry)
+		tf := spatial.TransformComponent.Get(entry)
 		if spr.Source == nil {
 			res := resource.Get[image.Image](spr.Path)
 			spr.Source = ebiten.NewImageFromImage(res)
 		}
 
-		render.Draw(spr.Source, render.RenderModeCanvas, tf.Index).
-			Scale(tf.Scale).
-			OriginMul(spr.Origin.XY()).
-			Rotation(tf.Rotation).
-			Position(tf.Position.XY()).Draw(img, cam)
+		rg.Add(func(world donburi.World, img *ebiten.Image, cam *camera.Camera) {
+			render.Draw(spr.Source, render.RenderModeWorld, tf.Index).
+				Scale(tf.Scale).
+				Origin(spr.Origin.XY()).
+				Rotation(tf.Rotation).
+				Position(tf.Position.XY()).Draw(img, cam)
+		}, tf.Index)
 	})
 }

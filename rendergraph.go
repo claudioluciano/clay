@@ -36,12 +36,12 @@ func (rg *RenderGraph) Prepare() {
 	})
 }
 
-func (rg *RenderGraph) Render(screen, surface *ebiten.Image, w donburi.World) {
+func (rg *RenderGraph) Render(screen *ebiten.Image, w donburi.World) {
 	screen.Clear()
 
 	// Skips rendering if there's no queued operations.
 	if len(rg.queue) == 0 {
-		ebitenutil.DebugPrintAt(surface, "RENDERING SKIPPED\nNo items queued", 10, 10)
+		ebitenutil.DebugPrintAt(screen, "RENDERING SKIPPED\nNo items queued", 10, 10)
 		return
 	}
 
@@ -49,7 +49,7 @@ func (rg *RenderGraph) Render(screen, surface *ebiten.Image, w donburi.World) {
 	// Displays a message to the consumer telling them to add the camera to the world.
 	gameCamera := ecsutil.FirstOf[camera.Camera](camera.Component, w)
 	if gameCamera == nil {
-		ebitenutil.DebugPrintAt(surface, "NO CAMERA IS PRESENT\n> Add a camera to the ECS world.", 10, 10)
+		ebitenutil.DebugPrintAt(screen, "NO CAMERA IS PRESENT\n> Add a camera to the ECS world.", 10, 10)
 		return
 	}
 
@@ -59,10 +59,8 @@ func (rg *RenderGraph) Render(screen, surface *ebiten.Image, w donburi.World) {
 			log.Panic("No draw function")
 			return
 		}
-		item.drawFunction(w, surface, gameCamera)
+		item.drawFunction(w, screen, gameCamera)
 	}
-
-	screen.DrawImage(surface, &ebiten.DrawImageOptions{})
 
 	// Clear the queue
 	rg.queue = nil
