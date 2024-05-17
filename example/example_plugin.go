@@ -12,7 +12,8 @@ import (
 	"github.com/leap-fish/clay/plugins/render"
 	"github.com/leap-fish/clay/plugins/resources"
 	log "github.com/sirupsen/logrus"
-	"github.com/yohamta/donburi/features/math"
+	m "github.com/yohamta/donburi/features/math"
+	"math"
 	"time"
 )
 
@@ -40,15 +41,16 @@ func (e *ExamplePlugin) Ready(core *clay.Core) {
 	ent := imageSprite.Spawn(core.World)
 	imageEntry := core.World.Entry(ent)
 	spatial.TransformComponent.Set(imageEntry, &spatial.Transform{
-		Position: math.Vec2{0, 0},
+		Position: m.Vec2{0, 0},
 		Scale:    0.3,
 	})
 
 	ent2 := imageSprite.Spawn(core.World)
 	imageEntry2 := core.World.Entry(ent2)
 	spatial.TransformComponent.Set(imageEntry2, &spatial.Transform{
-		Index:    -1,
-		Position: math.Vec2{0, 0},
+		Index:    3,
+		Position: m.Vec2{-100, -100},
+		Rotation: 90 * (math.Pi / 180),
 		Scale:    0.1,
 	})
 }

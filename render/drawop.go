@@ -104,15 +104,14 @@ func (d *DrawOp) Filter(filter ebiten.Filter) *DrawOp {
 // Called by the render loop.
 func (d *DrawOp) Draw(surface *ebiten.Image, camera *camera.Camera) {
 	d.ops.GeoM.Translate(-d.originX, -d.originY)
-	d.ops.GeoM.Rotate(float64(d.rotation))
-	d.ops.GeoM.Translate(d.originX, d.originY)
-	spritePosX, spritePosY := d.posX-d.originX, d.posY-d.originY
-	d.ops.GeoM.Translate(spritePosX, spritePosY)
-
 	// Non-essential operations are checked first
 	if d.scale != 1 {
 		d.ops.GeoM.Scale(d.scale, d.scale)
 	}
+	d.ops.GeoM.Rotate(float64(d.rotation))
+	d.ops.GeoM.Translate(d.originX, d.originY)
+	spritePosX, spritePosY := d.posX-d.originX, d.posY-d.originY
+	d.ops.GeoM.Translate(spritePosX, spritePosY)
 
 	if d.skewX != 0 && d.skewY != 0 {
 		d.ops.GeoM.Skew(d.skewX, d.skewY)
