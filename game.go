@@ -2,8 +2,10 @@ package clay
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
+	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
 	"math"
+	"reflect"
 )
 
 type ClayGame struct {
@@ -11,6 +13,8 @@ type ClayGame struct {
 	RenderScale float64
 	Core        *Core
 	World       donburi.World
+
+	DrawSurface *ebiten.Image
 }
 
 func (g *ClayGame) Update() error {
@@ -23,23 +27,29 @@ func (g *ClayGame) Update() error {
 }
 
 func (g *ClayGame) Draw(screen *ebiten.Image) {
-	/*	for _, m := range g.Core.SortedModules {
-		moduleRenderable, isRenderable := m.(RenderableModule)
-		if isRenderable {
-			//render.QueueFunc(moduleRenderable.QueueDraw)
-			log.Info("Is renderable", moduleRenderable)
-			moduleRenderable.Draw(screen)
-		}
-		//log.Trace("Drawing for", reflect.TypeOf(m))
-	}*/
+	if g.DrawSurface == nil {
+		g.DrawSurface = ebiten.NewImage(g.ScrW, g.ScrH)
+	}
+
+	bounds := g.DrawSurface.Bounds()
+	if bounds.Dx() != g.ScrW || bounds.Dy() != g.ScrH {
+		g.DrawSurface = ebiten.NewImage(g.ScrW, g.ScrH)
+	}
+
+	g.DrawSurface.Clear()
+	for _, renderable := range g.Core.SubSystemRegistry.Renderables {
+		log.Info("Queue ", reflect.TypeOf(renderable), renderable.Render)
+		g.Core.RenderGraph.Add(renderable.Render, 0)
+	}
 
 	// Finds the graph:
 	g.Core.RenderGraph.Prepare()
-	g.Core.RenderGraph.Render(screen, g.World)
+
+	g.Core.RenderGraph.Render(screen, g.DrawSurface, g.World)
 }
 
 func (g *ClayGame) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	w := math.Round(float64(outsideWidth) / g.RenderScale)
-	h := math.Round(float64(outsideHeight) / g.RenderScale)
-	return int(w), int(h)
+	g.ScrW = int(math.Round(float64(outsideWidth) / g.RenderScale))
+	g.ScrH = int(math.Round(float64(outsideHeight) / g.RenderScale))
+	return g.ScrW, g.ScrH
 }

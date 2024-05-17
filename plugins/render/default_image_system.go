@@ -35,7 +35,6 @@ func (s DefaultImageSystem) Render(w donburi.World, img *ebiten.Image, cam *came
 			Scale(tf.Scale).
 			OriginMul(spr.Origin.XY()).
 			Rotation(tf.Rotation).
-			Position(tf.Position.XY()).
-			Queue()
+			Position(tf.Position.XY()).Draw(img, cam)
 	})
 }

@@ -70,12 +70,22 @@ func (e *ExamplePlugin) Draw(screen *ebiten.Image, camera camera.Camera) {
 }
 
 func (e *ExamplePlugin) Ready(core *clay.Core) {
+	core.World.Create(camera.Component)
+
 	e.font = resource.Get[*text.GoTextFaceSource]("font:BaiJamjuree-Regular")
 
 	ent := imageSprite.Spawn(e.ecs.World)
 	imageEntry := e.ecs.World.Entry(ent)
 	transform.Component.Set(imageEntry, &transform.Transform{
 		Position: math.Vec2{240, 260},
+		Scale:    0.3,
+	})
+
+	ent2 := imageSprite.Spawn(e.ecs.World)
+	imageEntry2 := e.ecs.World.Entry(ent2)
+	transform.Component.Set(imageEntry2, &transform.Transform{
+		Index:    -1,
+		Position: math.Vec2{500, 360},
 		Scale:    0.3,
 	})
 }

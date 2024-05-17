@@ -67,7 +67,7 @@ func (d *DrawOp) Origin(originX, originY float64) *DrawOp {
 	return d
 }
 
-// Origin sets the origin of the sprite.
+// OriginMul sets the origin of the sprite.
 func (d *DrawOp) OriginMul(originX, originY float64) *DrawOp {
 	bounds := d.image.Bounds()
 	d.originX = originX * float64(bounds.Dx())
@@ -100,14 +100,9 @@ func (d *DrawOp) Filter(filter ebiten.Filter) *DrawOp {
 	return d
 }
 
-// Queue adds the draw op to the rendering queue.
-func (d *DrawOp) Queue() {
-	QueueRender(d, d.mode, d.layer)
-}
-
 // commit is used internally to perform the actual rendering.
 // Called by the render loop.
-func (d *DrawOp) commit(surface *ebiten.Image, camera *camera.Camera) {
+func (d *DrawOp) Draw(surface *ebiten.Image, camera *camera.Camera) {
 	d.ops.GeoM.Translate(-d.originX, -d.originY)
 	d.ops.GeoM.Rotate(float64(d.rotation))
 	d.ops.GeoM.Translate(d.originX, d.originY)
