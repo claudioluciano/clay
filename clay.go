@@ -21,7 +21,8 @@ type LaunchOptions struct {
 }
 
 type Core struct {
-	ECS *ecs.ECS
+	ECS   *ecs.ECS
+	World donburi.World
 
 	moduleTypes   []reflect.Type
 	builtModules  []reflect.Type
@@ -39,8 +40,12 @@ func New() *Core {
 	log.SetLevel(log.Level(*levelFlag))
 	log.SetFormatter(&log.TextFormatter{ForceColors: *loggingColors})
 
+	world := donburi.NewWorld()
+	ecsInstance := ecs.NewECS(world)
+
 	return &Core{
-		ECS: ecs.NewECS(donburi.NewWorld()),
+		ECS:   ecsInstance,
+		World: world,
 		options: &LaunchOptions{
 			WindowWidth:  800,
 			WindowHeight: 600,
@@ -110,8 +115,6 @@ func (c *Core) Build() {
 }
 
 func (c *Core) Run() {
-	log.Trace("Clay: Run()")
-
 	// After all modules are built, run the `Ready` function
 	for _, module := range c.SortedModules {
 		module.Ready(c)
@@ -125,6 +128,7 @@ func (c *Core) Run() {
 	c.Game = &ClayGame{
 		RenderScale: 1.0,
 		Core:        c,
+		World:       c.World,
 	}
 
 	err := ebiten.RunGame(c.Game)

@@ -1,4 +1,4 @@
-package editor
+package example
 
 import (
 	"bytes"
@@ -15,7 +15,6 @@ import (
 	"github.com/leap-fish/clay/components/transform"
 	"github.com/leap-fish/clay/modules/render"
 	"github.com/leap-fish/clay/modules/resources"
-	render2 "github.com/leap-fish/clay/render"
 	"github.com/leap-fish/clay/resource"
 	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi/ecs"
@@ -33,7 +32,7 @@ var (
 //go:embed assets
 var EditorFiles embed.FS
 
-type EditorModule struct {
+type ExampleModule struct {
 	font *text.GoTextFaceSource
 	ecs  *ecs.ECS
 }
@@ -44,37 +43,33 @@ var imageSprite = bundle.New().
 		Path: "image:image",
 	})
 
-func (e *EditorModule) Update(dt time.Duration) {
+func (e *ExampleModule) Update(dt time.Duration) {
 }
 
-func (e *EditorModule) Draw(screen *ebiten.Image) {
-	render2.QueueFunc(func(screen *ebiten.Image, camera *camera.Camera) {
-		op := &text.DrawOptions{}
-		op.ColorScale.ScaleWithColor(color.RGBA{255, 255, 255, 255})
-		op.GeoM.Translate(32, 32)
-		op.LineSpacing = 32
-		text.Draw(
-			screen,
-			fmt.Sprintf("Clay Editor"),
-			&text.GoTextFace{
-				Source: e.font,
-				Size:   32,
-			},
-			op,
-		)
+func (e *ExampleModule) Draw(screen *ebiten.Image, camera camera.Camera) {
+	op := &text.DrawOptions{}
+	op.ColorScale.ScaleWithColor(color.RGBA{255, 255, 255, 255})
+	op.GeoM.Translate(32, 32)
+	op.LineSpacing = 32
+	text.Draw(
+		screen,
+		fmt.Sprintf("Clay Editor"),
+		&text.GoTextFace{
+			Source: e.font,
+			Size:   32,
+		},
+		op,
+	)
 
-		var out bytes.Buffer
-		for _, c := range debug.GetEntityCounts(e.ecs.World) {
-			out.WriteString(fmt.Sprintf("> %s", c.String()))
-			out.WriteString("\n")
-		}
-		ebitenutil.DebugPrintAt(screen, out.String(), 0, 0)
-
-	}, 0)
-
+	var out bytes.Buffer
+	for _, c := range debug.GetEntityCounts(e.ecs.World) {
+		out.WriteString(fmt.Sprintf("> %s", c.String()))
+		out.WriteString("\n")
+	}
+	ebitenutil.DebugPrintAt(screen, out.String(), 0, 0)
 }
 
-func (e *EditorModule) Ready(core *clay.Core) {
+func (e *ExampleModule) Ready(core *clay.Core) {
 	e.font = resource.Get[*text.GoTextFaceSource]("font:BaiJamjuree-Regular")
 
 	ent := imageSprite.Spawn(e.ecs.World)
@@ -85,7 +80,7 @@ func (e *EditorModule) Ready(core *clay.Core) {
 	})
 }
 
-func (e *EditorModule) Build(core *clay.Core) {
+func (e *ExampleModule) Build(core *clay.Core) {
 	core.Module(
 		resources.NewDefaultResourcesModule("assets", EditorFiles),
 		&render.DefaultRendererModule{},
