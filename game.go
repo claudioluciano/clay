@@ -26,10 +26,6 @@ func (g *ClayGame) Init() {
 
 func (g *ClayGame) Update() error {
 	events.ProcessAllEvents(g.World)
-	/*	for _, m := range g.Core.SortedPlugins {
-		dt := time.Second / time.Duration(ebiten.TPS())
-		m.Update(dt)
-	}*/
 
 	for _, updatable := range g.Core.SubSystemRegistry.Updatables {
 		//g.Core.RenderGraph.Add(updatable.Render, i)
@@ -41,13 +37,10 @@ func (g *ClayGame) Update() error {
 
 func (g *ClayGame) Draw(screen *ebiten.Image) {
 	for _, renderable := range g.Core.SubSystemRegistry.Renderables {
-		//g.Core.RenderGraph.Add(renderable.Render, i)
 		renderable.Render(g.Core.RenderGraph, g.World)
 	}
 
-	// Finds the graph:
 	g.Core.RenderGraph.Prepare()
-
 	g.Core.RenderGraph.Render(screen, g.World)
 }
 
