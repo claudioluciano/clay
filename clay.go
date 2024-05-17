@@ -1,33 +1,38 @@
 package clay
 
 import (
-	"cmp"
 	"flag"
 	"github.com/hajimehoshi/ebiten/v2"
 	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/ecs"
-	"reflect"
-	"slices"
 )
 
-var levelFlag = flag.Int("logging", int(log.InfoLevel), "Sets the logging level of the engine in Logrus levels.")
+var levelFlag = flag.Int("logging", int(log.InfoLevel), "Sets the logging level of the engine in Logrus levels (0 to 6).")
 var loggingColors = flag.Bool("logcolors", false, "Whether logging will have colors enabled")
 
+// LaunchOptions is a simple struct that holds a standard set of launch options that the user may change.
 type LaunchOptions struct {
 	WindowWidth  int
 	WindowHeight int
 	RenderScale  int
 }
 
+// Core holds subsystems for Clay.
+// This struct contains most relevant methods of implementing features for a Clay based application.
 type Core struct {
-	ECS   *ecs.ECS
+	// The root ECS instance
+	// TODO: Does this actually need to be exposed?
+	ECS *ecs.ECS
+
+	// Shortcut to ECS.World
 	World donburi.World
 
-	moduleTypes   []reflect.Type
-	builtModules  []reflect.Type
-	Modules       []Module
-	SortedModules []Module
+	// Used for rendering
+	RenderGraph *RenderGraph
+
+	PluginRegistry    *PluginRegistry
+	SubSystemRegistry *SubSystemRegistry
 
 	Game *ClayGame
 
@@ -43,33 +48,30 @@ func New() *Core {
 	world := donburi.NewWorld()
 	ecsInstance := ecs.NewECS(world)
 
-	return &Core{
-		ECS:   ecsInstance,
-		World: world,
+	core := &Core{
+		ECS:               ecsInstance,
+		World:             world,
+		RenderGraph:       &RenderGraph{},
+		SubSystemRegistry: &SubSystemRegistry{},
 		options: &LaunchOptions{
 			WindowWidth:  800,
 			WindowHeight: 600,
 			RenderScale:  1.0,
 		},
 	}
+
+	core.PluginRegistry = NewPluginRegistry(core)
+
+	return core
 }
 
-func (c *Core) Module(module ...Module) *Core {
-	for _, m := range module {
-		moduleType := reflect.TypeOf(m)
-		if slices.Contains(c.moduleTypes, moduleType) {
-			continue
-		}
+func (c *Core) Plugin(plugins ...Plugin) *Core {
+	c.PluginRegistry.Add(plugins)
+	return c
+}
 
-		log.Tracef("Add module %s", moduleType)
-		c.moduleTypes = append(c.moduleTypes, moduleType)
-		c.Modules = append(c.Modules, m)
-	}
-
-	c.SortedModules = c.sortModules()
-
-	c.Build()
-
+func (c *Core) SubSystem(systems ...SubSystem) *Core {
+	c.SubSystemRegistry.Add(systems)
 	return c
 }
 
@@ -79,45 +81,13 @@ func (c *Core) LaunchOptions(options LaunchOptions) *Core {
 	return c
 }
 
-// SortedModules returns modules in sorted order according to their Order() function.
-func (c *Core) sortModules() []Module {
-	var modules []Module
-	modules = append(modules, c.Modules...)
-	slices.SortFunc(modules, func(a, b Module) int {
-		var aValue int
-		var bValue int
-
-		aOrdered, aOk := a.(Sortable)
-		if aOk {
-			aValue = aOrdered.Order()
-		}
-
-		bOrdered, bOk := b.(Sortable)
-		if bOk {
-			bValue = bOrdered.Order()
-		}
-
-		return cmp.Compare(aValue, bValue)
-	})
-	return modules
-}
-
 func (c *Core) Build() {
-	// Modules are the first things to get initialized
-	for _, module := range c.SortedModules {
-		moduleType := reflect.TypeOf(module)
-		if slices.Contains(c.builtModules, moduleType) {
-			continue
-		}
-		c.builtModules = append(c.builtModules, moduleType)
-		module.Build(c)
-	}
+	c.PluginRegistry.BuildPlugins()
 }
 
 func (c *Core) Run() {
-	// After all modules are built, run the `Ready` function
-	for _, module := range c.SortedModules {
-		module.Ready(c)
+	for _, plugin := range c.PluginRegistry.Plugins {
+		plugin.Ready(c)
 	}
 
 	// Defaults

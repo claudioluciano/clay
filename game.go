@@ -2,10 +2,8 @@ package clay
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/leap-fish/clay/modules/render"
 	"github.com/yohamta/donburi"
 	"math"
-	"time"
 )
 
 type ClayGame struct {
@@ -16,10 +14,10 @@ type ClayGame struct {
 }
 
 func (g *ClayGame) Update() error {
-	for _, m := range g.Core.SortedModules {
+	/*	for _, m := range g.Core.SortedPlugins {
 		dt := time.Second / time.Duration(ebiten.TPS())
 		m.Update(dt)
-	}
+	}*/
 
 	return nil
 }
@@ -36,8 +34,8 @@ func (g *ClayGame) Draw(screen *ebiten.Image) {
 	}*/
 
 	// Finds the graph:
-	render.GraphQuery.First(g.World)
-
+	g.Core.RenderGraph.Prepare()
+	g.Core.RenderGraph.Render(screen, g.World)
 }
 
 func (g *ClayGame) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {

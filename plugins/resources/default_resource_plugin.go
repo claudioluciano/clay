@@ -4,36 +4,36 @@ import (
 	"embed"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/leap-fish/clay"
-	"github.com/leap-fish/clay/modules/resources/defaults"
+	"github.com/leap-fish/clay/plugins/resources/defaults"
 	"github.com/leap-fish/clay/resource"
 	log "github.com/sirupsen/logrus"
 	"math"
 	"time"
 )
 
-type DefaultResourcesModule struct {
+type DefaultResourcesPlugin struct {
 	FileSystem embed.FS
 	Path       string
 }
 
-func NewDefaultResourcesModule(path string, fs embed.FS) *DefaultResourcesModule {
-	return &DefaultResourcesModule{
+func NewDefaultResourcesPlugin(path string, fs embed.FS) *DefaultResourcesPlugin {
+	return &DefaultResourcesPlugin{
 		Path:       path,
 		FileSystem: fs,
 	}
 }
 
-func (r *DefaultResourcesModule) Order() int {
+func (r *DefaultResourcesPlugin) Order() int {
 	return math.MinInt32
 }
 
-func (r *DefaultResourcesModule) Build(core *clay.Core) {
+func (r *DefaultResourcesPlugin) Build(core *clay.Core) {
 	log.Info("Registering default handlers")
 	resource.RegisterHandler("image", ".png", &defaults.PngDefaultHandler{})
 	resource.RegisterHandler("font", ".ttf", &defaults.TtfDefaultHandler{})
 }
 
-func (r *DefaultResourcesModule) Ready(core *clay.Core) {
+func (r *DefaultResourcesPlugin) Ready(core *clay.Core) {
 	resourceErrs := resource.LoadFromEmbedFolder(r.Path, r.FileSystem)
 	if len(resourceErrs) > 0 {
 		log.
@@ -44,8 +44,8 @@ func (r *DefaultResourcesModule) Ready(core *clay.Core) {
 	}
 }
 
-func (r *DefaultResourcesModule) Update(dt time.Duration) {
+func (r *DefaultResourcesPlugin) Update(dt time.Duration) {
 }
 
-func (r *DefaultResourcesModule) Draw(screen *ebiten.Image) {
+func (r *DefaultResourcesPlugin) Draw(screen *ebiten.Image) {
 }

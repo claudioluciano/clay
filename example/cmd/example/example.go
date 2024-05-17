@@ -7,7 +7,7 @@ import (
 
 func main() {
 	c := clay.New()
-	c.Module(&example.ExampleModule{})
+	c.Plugin(&example.ExamplePlugin{})
 
 	c.Build()
 	c.Run()

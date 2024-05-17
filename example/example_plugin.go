@@ -13,8 +13,8 @@ import (
 	"github.com/leap-fish/clay/components/camera"
 	"github.com/leap-fish/clay/components/sprite"
 	"github.com/leap-fish/clay/components/transform"
-	"github.com/leap-fish/clay/modules/render"
-	"github.com/leap-fish/clay/modules/resources"
+	"github.com/leap-fish/clay/plugins/render"
+	"github.com/leap-fish/clay/plugins/resources"
 	"github.com/leap-fish/clay/resource"
 	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi/ecs"
@@ -32,7 +32,7 @@ var (
 //go:embed assets
 var EditorFiles embed.FS
 
-type ExampleModule struct {
+type ExamplePlugin struct {
 	font *text.GoTextFaceSource
 	ecs  *ecs.ECS
 }
@@ -43,10 +43,10 @@ var imageSprite = bundle.New().
 		Path: "image:image",
 	})
 
-func (e *ExampleModule) Update(dt time.Duration) {
+func (e *ExamplePlugin) Update(dt time.Duration) {
 }
 
-func (e *ExampleModule) Draw(screen *ebiten.Image, camera camera.Camera) {
+func (e *ExamplePlugin) Draw(screen *ebiten.Image, camera camera.Camera) {
 	op := &text.DrawOptions{}
 	op.ColorScale.ScaleWithColor(color.RGBA{255, 255, 255, 255})
 	op.GeoM.Translate(32, 32)
@@ -69,7 +69,7 @@ func (e *ExampleModule) Draw(screen *ebiten.Image, camera camera.Camera) {
 	ebitenutil.DebugPrintAt(screen, out.String(), 0, 0)
 }
 
-func (e *ExampleModule) Ready(core *clay.Core) {
+func (e *ExamplePlugin) Ready(core *clay.Core) {
 	e.font = resource.Get[*text.GoTextFaceSource]("font:BaiJamjuree-Regular")
 
 	ent := imageSprite.Spawn(e.ecs.World)
@@ -80,10 +80,10 @@ func (e *ExampleModule) Ready(core *clay.Core) {
 	})
 }
 
-func (e *ExampleModule) Build(core *clay.Core) {
-	core.Module(
-		resources.NewDefaultResourcesModule("assets", EditorFiles),
-		&render.DefaultRendererModule{},
+func (e *ExamplePlugin) Build(core *clay.Core) {
+	core.Plugin(
+		resources.NewDefaultResourcesPlugin("assets", EditorFiles),
+		&render.DefaultRendererPlugin{},
 	)
 
 	e.ecs = core.ECS
