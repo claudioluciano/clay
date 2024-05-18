@@ -45,8 +45,9 @@ func (g *ClayGame) Draw(screen *ebiten.Image) {
 }
 
 func (g *ClayGame) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	newW := int(math.Round(float64(outsideWidth) / g.RenderScale))
-	newH := int(math.Round(float64(outsideHeight) / g.RenderScale))
+	scaleFactor := ebiten.Monitor().DeviceScaleFactor()
+	newW := int(math.Round(float64(outsideWidth)/g.RenderScale) * scaleFactor)
+	newH := int(math.Round(float64(outsideHeight)/g.RenderScale) * scaleFactor)
 
 	if newW != g.ScrW || newH != g.ScrH {
 		ev.EngineWindowSizeUpdated.Publish(g.World, ev.WindowSizeUpdate{
@@ -56,8 +57,9 @@ func (g *ClayGame) Layout(outsideWidth, outsideHeight int) (screenWidth, screenH
 		g.ScrW = newW
 		g.ScrH = newH
 		log.
-			WithField("w", g.ScrW).
-			WithField("h", g.ScrH).
+			WithField("windowWidth", g.ScrW).
+			WithField("windowHeight", g.ScrH).
+			WithField("scale", g.RenderScale).
 			Trace("Layout size has changed")
 	} else {
 	}
