@@ -10,13 +10,14 @@ const (
 	radianRotationOffsetHalfCircle = math.Pi / 2
 )
 
-var TransformComponent = donburi.NewComponentType[Transform](Transform{
-	Position: m.NewVec2(0, 0),
-	Index:    0,
+var TransformComponent = donburi.NewComponentType[Transform](DefaultTransform)
 
+var DefaultTransform = Transform{
+	Position: m.Vec2{},
+	Index:    0,
 	Rotation: 0,
 	Scale:    1.0,
-})
+}
 
 type Transform struct {
 	Position m.Vec2

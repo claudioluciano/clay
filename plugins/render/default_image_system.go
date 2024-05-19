@@ -19,11 +19,12 @@ type DefaultImageSystem struct {
 
 func NewDefaultImageSystem() *DefaultImageSystem {
 	return &DefaultImageSystem{
-		imageQuery: donburi.NewQuery(filter.Contains(sprite.Component)),
+		imageQuery: donburi.NewQuery(
+			filter.Contains(sprite.Component, spatial.TransformComponent)),
 	}
 }
 
-func (s DefaultImageSystem) Render(rg *clay.RenderGraph, w donburi.World) {
+func (s *DefaultImageSystem) Render(rg *clay.RenderGraph, w donburi.World) {
 	s.imageQuery.Each(w, func(entry *donburi.Entry) {
 		spr := sprite.Component.Get(entry)
 		tf := spatial.TransformComponent.Get(entry)
@@ -37,7 +38,9 @@ func (s DefaultImageSystem) Render(rg *clay.RenderGraph, w donburi.World) {
 				Scale(tf.Scale).
 				Origin(spr.Origin.XY()).
 				Rotation(tf.Rotation).
-				Position(tf.Position.XY()).Draw(img, cam)
+				Filter(ebiten.FilterLinear).
+				Position(tf.Position.XY()).
+				Draw(img, cam)
 		}, tf.Index)
 	})
 }

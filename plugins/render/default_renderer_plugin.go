@@ -15,8 +15,10 @@ type DefaultRendererPlugin struct {
 }
 
 func (d *DefaultRendererPlugin) Build(core *clay.Core) {
-	core.SubSystem(NewDefaultImageSystem())
+	core.SubSystem(
+		NewDefaultImageSystem(),
+		NewDefaultTextSystem(),
+	)
 }
 
-func (d *DefaultRendererPlugin) Ready(core *clay.Core) {
-}
+func (d *DefaultRendererPlugin) Ready(core *clay.Core) {}

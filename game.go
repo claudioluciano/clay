@@ -19,7 +19,6 @@ type ClayGame struct {
 
 func (g *ClayGame) Init() {
 	for _, initializable := range g.Core.SubSystemRegistry.Initializables {
-		//g.Core.RenderGraph.Add(initializable.Render, i)
 		initializable.Init(g.World)
 	}
 }
