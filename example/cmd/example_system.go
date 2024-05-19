@@ -19,11 +19,11 @@ import (
 
 var DebugMarker = donburi.NewTag()
 
-type ExampleRenderer struct {
+type ExampleSystem struct {
 	font *text.GoTextFaceSource
 }
 
-func (e *ExampleRenderer) Update(w donburi.World, dt time.Duration) {
+func (e *ExampleSystem) Update(w donburi.World, dt time.Duration) {
 	q := donburi.NewQuery(filter.Contains(txt.Component, spatial.TransformComponent))
 	entry, exists := q.First(w)
 	if !exists || entry == nil {
@@ -37,7 +37,7 @@ func (e *ExampleRenderer) Update(w donburi.World, dt time.Duration) {
 	}
 }
 
-func (e *ExampleRenderer) Init(w donburi.World) {
+func (e *ExampleSystem) Init(w donburi.World) {
 	e.font = resource.Get[*text.GoTextFaceSource]("font:BaiJamjuree-Regular")
 
 	DebugMarker.SetName("DebugMarker")
@@ -71,4 +71,4 @@ func (e *ExampleRenderer) Init(w donburi.World) {
 	secondText.Spawn(w)
 }
 
-func (e *ExampleRenderer) Render(rg *clay.RenderGraph, w donburi.World) {}
+func (e *ExampleSystem) Render(rg *clay.RenderGraph, w donburi.World) {}

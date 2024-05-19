@@ -62,7 +62,7 @@ func (e *ExamplePlugin) Build(core *clay.Core) {
 		&render.DefaultRendererPlugin{},
 	)
 
-	core.SubSystem(&cmd.ExampleRenderer{})
+	core.SubSystem(&cmd.ExampleSystem{})
 
 	core.LaunchOptions(clay.LaunchOptions{
 		WindowWidth:   *windowWidthFlag,
