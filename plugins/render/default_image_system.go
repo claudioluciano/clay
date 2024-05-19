@@ -4,6 +4,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/leap-fish/clay"
 	"github.com/leap-fish/clay/components/camera"
+	"github.com/leap-fish/clay/components/dpi"
 	"github.com/leap-fish/clay/components/spatial"
 	"github.com/leap-fish/clay/components/sprite"
 	"github.com/leap-fish/clay/render"
@@ -25,6 +26,7 @@ func NewDefaultImageSystem() *DefaultImageSystem {
 }
 
 func (s *DefaultImageSystem) Render(rg *clay.RenderGraph, w donburi.World) {
+	scaleFactor := dpi.GetScaleFactor(w)
 	s.imageQuery.Each(w, func(entry *donburi.Entry) {
 		spr := sprite.Component.Get(entry)
 		tf := spatial.TransformComponent.Get(entry)
@@ -35,7 +37,7 @@ func (s *DefaultImageSystem) Render(rg *clay.RenderGraph, w donburi.World) {
 
 		rg.Add(func(world donburi.World, img *ebiten.Image, cam *camera.Camera) {
 			render.Draw(spr.Source, render.RenderModeWorld, tf.Index).
-				Scale(tf.Scale).
+				Scale(tf.Scale*scaleFactor).
 				Origin(spr.Origin.XY()).
 				Rotation(tf.Rotation).
 				Filter(ebiten.FilterLinear).

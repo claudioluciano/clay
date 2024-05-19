@@ -11,11 +11,13 @@ import (
 var levelFlag = flag.Int("logging", int(log.InfoLevel), "Sets the logging level of the engine in Logrus levels (0 to 6).")
 var loggingColors = flag.Bool("logcolors", false, "Whether logging will have colors enabled")
 
-// LaunchOptions is a simple struct that holds a standard set of launch options that the user may change.
+// LaunchOptions is a simple struct that holds a standard set of launch Options that the user may change.
 type LaunchOptions struct {
 	WindowWidth  int
 	WindowHeight int
-	RenderScale  int
+
+	RenderScale   float64
+	UseDPIScaling bool
 }
 
 // Core holds subsystems for Clay.
@@ -36,7 +38,7 @@ type Core struct {
 
 	Game *ClayGame
 
-	options *LaunchOptions
+	Options *LaunchOptions
 }
 
 func New() *Core {
@@ -53,10 +55,11 @@ func New() *Core {
 		World:             world,
 		RenderGraph:       &RenderGraph{},
 		SubSystemRegistry: &SubSystemRegistry{},
-		options: &LaunchOptions{
-			WindowWidth:  800,
-			WindowHeight: 600,
-			RenderScale:  1.0,
+		Options: &LaunchOptions{
+			WindowWidth:   800,
+			WindowHeight:  600,
+			UseDPIScaling: true,
+			RenderScale:   1.0,
 		},
 	}
 
@@ -77,7 +80,7 @@ func (c *Core) SubSystem(systems ...SubSystem) *Core {
 
 // LaunchOptions is used to configure the `LaunchOptions` structure used to define certain defaults.
 func (c *Core) LaunchOptions(options LaunchOptions) *Core {
-	c.options = &options
+	c.Options = &options
 	return c
 }
 
@@ -91,14 +94,13 @@ func (c *Core) Run() {
 	}
 
 	// Defaults
-	ebiten.SetWindowSize(c.options.WindowWidth, c.options.WindowHeight)
+	ebiten.SetWindowSize(c.Options.WindowWidth, c.Options.WindowHeight)
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 
 	// Initializes the game instance
 	c.Game = &ClayGame{
-		RenderScale: 1.0,
-		Core:        c,
-		World:       c.World,
+		Core:  c,
+		World: c.World,
 	}
 
 	c.Game.Init()

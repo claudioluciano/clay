@@ -2,6 +2,7 @@ package clay
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/leap-fish/clay/components/dpi"
 	ev "github.com/leap-fish/clay/events"
 	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
@@ -11,10 +12,9 @@ import (
 )
 
 type ClayGame struct {
-	ScrW, ScrH  int
-	RenderScale float64
-	Core        *Core
-	World       donburi.World
+	ScrW, ScrH int
+	Core       *Core
+	World      donburi.World
 }
 
 func (g *ClayGame) Init() {
@@ -44,9 +44,10 @@ func (g *ClayGame) Draw(screen *ebiten.Image) {
 }
 
 func (g *ClayGame) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	scaleFactor := ebiten.Monitor().DeviceScaleFactor()
-	newW := int(math.Round(float64(outsideWidth)/g.RenderScale) * scaleFactor)
-	newH := int(math.Round(float64(outsideHeight)/g.RenderScale) * scaleFactor)
+	scaleFactor := dpi.GetScaleFactor(g.Core.World)
+	renderScale := g.Core.Options.RenderScale
+	newW := int(math.Round(float64(outsideWidth)/renderScale) * scaleFactor)
+	newH := int(math.Round(float64(outsideHeight)/renderScale) * scaleFactor)
 
 	if newW != g.ScrW || newH != g.ScrH {
 		ev.EngineWindowSizeUpdated.Publish(g.World, ev.WindowSizeUpdate{
@@ -58,9 +59,9 @@ func (g *ClayGame) Layout(outsideWidth, outsideHeight int) (screenWidth, screenH
 		log.
 			WithField("windowWidth", g.ScrW).
 			WithField("windowHeight", g.ScrH).
-			WithField("scale", g.RenderScale).
+			WithField("scale", renderScale).
+			WithField("scaleFactor", scaleFactor).
 			Trace("Layout size has changed")
-	} else {
 	}
 
 	return g.ScrW, g.ScrH

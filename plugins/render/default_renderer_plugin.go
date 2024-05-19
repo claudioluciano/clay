@@ -3,6 +3,7 @@ package render
 import (
 	"github.com/leap-fish/clay"
 	"github.com/leap-fish/clay/components/camera"
+	"github.com/leap-fish/clay/components/dpi"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/ecs"
 )
@@ -21,4 +22,8 @@ func (d *DefaultRendererPlugin) Build(core *clay.Core) {
 	)
 }
 
-func (d *DefaultRendererPlugin) Ready(core *clay.Core) {}
+func (d *DefaultRendererPlugin) Ready(core *clay.Core) {
+	if core.Options.UseDPIScaling {
+		core.World.Create(dpi.Component)
+	}
+}

@@ -5,6 +5,7 @@ import (
 	txt "github.com/hajimehoshi/ebiten/v2/text/v2"
 	"github.com/leap-fish/clay"
 	"github.com/leap-fish/clay/components/camera"
+	"github.com/leap-fish/clay/components/dpi"
 	"github.com/leap-fish/clay/components/spatial"
 	"github.com/leap-fish/clay/components/text"
 	"github.com/yohamta/donburi"
@@ -26,8 +27,7 @@ func NewDefaultTextSystem() *DefaultTextSystem {
 }
 
 func (s *DefaultTextSystem) Render(rg *clay.RenderGraph, w donburi.World) {
-	scaleFactor := ebiten.Monitor().DeviceScaleFactor()
-
+	scaleFactor := dpi.GetScaleFactor(w)
 	s.textQuery.Each(w, func(entry *donburi.Entry) {
 		t := text.Component.Get(entry)
 		tf := spatial.TransformComponent.Get(entry)

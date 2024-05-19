@@ -65,8 +65,10 @@ func (e *ExamplePlugin) Build(core *clay.Core) {
 	core.SubSystem(&cmd.ExampleRenderer{})
 
 	core.LaunchOptions(clay.LaunchOptions{
-		WindowWidth:  *windowWidthFlag,
-		WindowHeight: *windowHeightFlag,
+		WindowWidth:   *windowWidthFlag,
+		WindowHeight:  *windowHeightFlag,
+		UseDPIScaling: true,
+		RenderScale:   1.0,
 	})
 	log.Tracef("Window Size set to %dx%d", *windowWidthFlag, *windowHeightFlag)
 }
