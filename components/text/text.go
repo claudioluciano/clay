@@ -10,10 +10,10 @@ import (
 var Component = donburi.NewComponentType[Text]()
 
 type Text struct {
-	FontFace *text.GoTextFace
-	Content  bytes.Buffer
+	Content bytes.Buffer
 
-	Size int
+	Source *text.GoTextFaceSource
+	Size   float64
 
 	// LineHeight is the relative multiplier per line for font size.
 	// Set this to 1.0 if you're unsure.

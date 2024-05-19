@@ -103,8 +103,11 @@ func (d *DrawOp) Filter(filter ebiten.Filter) *DrawOp {
 // commit is used internally to perform the actual rendering.
 // Called by the render loop.
 func (d *DrawOp) Draw(surface *ebiten.Image, camera *camera.Camera) {
+	scaleFactor := ebiten.Monitor().DeviceScaleFactor()
+
 	d.ops.GeoM.Translate(-d.originX, -d.originY)
 	// Non-essential operations are checked first
+	d.ops.GeoM.Scale(scaleFactor, scaleFactor)
 	if d.scale != 1 {
 		d.ops.GeoM.Scale(d.scale, d.scale)
 	}

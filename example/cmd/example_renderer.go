@@ -20,8 +20,7 @@ import (
 var DebugMarker = donburi.NewTag()
 
 type ExampleRenderer struct {
-	font     *text.GoTextFaceSource
-	fontFace *text.GoTextFace
+	font *text.GoTextFaceSource
 }
 
 func (e *ExampleRenderer) Update(w donburi.World, dt time.Duration) {
@@ -40,21 +39,13 @@ func (e *ExampleRenderer) Update(w donburi.World, dt time.Duration) {
 
 func (e *ExampleRenderer) Init(w donburi.World) {
 	e.font = resource.Get[*text.GoTextFaceSource]("font:BaiJamjuree-Regular")
-	e.fontFace = &text.GoTextFace{
-		Source: e.font,
-		Size:   14,
-	}
-	bigFontFace := &text.GoTextFace{
-		Source: e.font,
-		Size:   22,
-	}
 
 	DebugMarker.SetName("DebugMarker")
 
 	textBundle := bundle.New().
 		With(spatial.TransformComponent, spatial.DefaultTransform).
 		With(txt.Component, txt.Text{
-			FontFace:   e.fontFace,
+			Source:     e.font,
 			Content:    bytes.Buffer{},
 			Size:       16,
 			LineHeight: 1.0,
@@ -69,7 +60,7 @@ func (e *ExampleRenderer) Init(w donburi.World) {
 	secondText := bundle.New().
 		With(spatial.TransformComponent, spatial.Transform{Position: math.NewVec2(200, 200), Scale: 1.0}).
 		With(txt.Component, txt.Text{
-			FontFace:   bigFontFace,
+			Source:     e.font,
 			Content:    secondTextBuf,
 			Size:       16,
 			LineHeight: 1.0,
