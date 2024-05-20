@@ -37,8 +37,6 @@ func (rg *RenderGraph) Prepare() {
 }
 
 func (rg *RenderGraph) Render(screen *ebiten.Image, w donburi.World) {
-	screen.Clear()
-
 	// Skips rendering if there's no queued operations.
 	if len(rg.queue) == 0 {
 		ebitenutil.DebugPrintAt(screen, "RENDERING SKIPPED\nNo items queued", 10, 10)
