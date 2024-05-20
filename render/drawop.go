@@ -6,7 +6,7 @@ import (
 )
 
 type DrawOp struct {
-	mode  RenderMode
+	mode  Mode
 	index int
 
 	scale    float64
@@ -27,7 +27,7 @@ type DrawOp struct {
 // By using Draw instead of manual ebiten drawing, you get automatic handling of rotations and sprite origins.
 // DrawOp makes sure the draw operations are performed in the correct order.
 // Call QueueRender() to draw onto the render pass.
-func Draw(image *ebiten.Image, mode RenderMode, index int) *DrawOp {
+func Draw(image *ebiten.Image, mode Mode, index int) *DrawOp {
 	return &DrawOp{
 		scale: 1.0,
 
@@ -40,7 +40,7 @@ func Draw(image *ebiten.Image, mode RenderMode, index int) *DrawOp {
 	}
 }
 
-func (d *DrawOp) Mode(mode RenderMode) *DrawOp {
+func (d *DrawOp) Mode(mode Mode) *DrawOp {
 	d.mode = mode
 	return d
 }
@@ -100,7 +100,7 @@ func (d *DrawOp) Filter(filter ebiten.Filter) *DrawOp {
 	return d
 }
 
-// commit is used internally to perform the actual rendering.
+// Draw is used internally to perform the actual rendering.
 // Called by the render loop.
 func (d *DrawOp) Draw(surface *ebiten.Image, camera *camera.Camera) {
 	d.ops.GeoM.Translate(-d.originX, -d.originY)
@@ -121,12 +121,12 @@ func (d *DrawOp) Draw(surface *ebiten.Image, camera *camera.Camera) {
 		d.ops.Filter = d.filter
 	}
 
-	if d.mode == RenderModeCanvas {
+	if d.mode == ModeCanvas {
 		surface.DrawImage(d.image, d.ops)
 		return
 	}
 
-	if d.mode == RenderModeWorld {
+	if d.mode == ModeWorld {
 		// If we are in non-canvas mode we have to modify the image with data from our camera.
 		camera.WorldMatrix(d.ops)
 		surface.DrawImage(d.image, d.ops)

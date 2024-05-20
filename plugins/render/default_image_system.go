@@ -36,7 +36,7 @@ func (s *DefaultImageSystem) Render(rg *clay.RenderGraph, w donburi.World) {
 		}
 
 		rg.Add(func(world donburi.World, img *ebiten.Image, cam *camera.Camera) {
-			render.Draw(spr.Source, render.RenderModeWorld, tf.Index).
+			render.Draw(spr.Source, render.ModeWorld, tf.Index).
 				Scale(tf.Scale*scaleFactor).
 				Origin(spr.Origin.XY()).
 				Rotation(tf.Rotation).
