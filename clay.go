@@ -85,7 +85,7 @@ func (c *Core) Run() {
 	}
 
 	if c.provider == nil {
-		log.Error("Cannot start Clay without provider. Call Provider() with a valid AppProvider instance.")
+		log.Fatal("Clay Core.Run() was called without setting AppProvider using Core.Provider() first")
 		return
 	}
 
