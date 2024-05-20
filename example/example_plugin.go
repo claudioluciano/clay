@@ -5,6 +5,7 @@ import (
 	"flag"
 	"github.com/leap-fish/clay"
 	"github.com/leap-fish/clay/bundle"
+	"github.com/leap-fish/clay/components/audio"
 	"github.com/leap-fish/clay/components/spatial"
 	"github.com/leap-fish/clay/components/sprite"
 	"github.com/leap-fish/clay/example/cmd"
@@ -12,6 +13,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	m "github.com/yohamta/donburi/features/math"
 	"math"
+	"time"
 )
 
 var (
@@ -22,14 +24,19 @@ var (
 //go:embed assets
 var EditorFiles embed.FS
 
-type ExamplePlugin struct {
-}
-
 var imageSprite = bundle.New().
 	With(spatial.TransformComponent, spatial.Transform{}).
 	With(sprite.Component, sprite.Sprite{
 		Path: "image:image",
 	})
+
+var audioEffect = bundle.New().
+	With(audio.Component, audio.SoundEffect{
+		Path:   "sfx:bell",
+		Volume: 0.02,
+	})
+
+type ExamplePlugin struct{}
 
 func (e *ExamplePlugin) Ready(core *clay.Core) {
 	ent := imageSprite.Spawn(core.World)
@@ -47,6 +54,17 @@ func (e *ExamplePlugin) Ready(core *clay.Core) {
 		Rotation: 90 * (math.Pi / 180),
 		Scale:    0.1,
 	})
+
+	go func() {
+		time.Sleep(1 * time.Second)
+		audioEffect.Spawn(core.World)
+
+		time.Sleep(2 * time.Second)
+		audioEffect.Spawn(core.World)
+
+		time.Sleep(2500 * time.Millisecond)
+		audioEffect.Spawn(core.World)
+	}()
 }
 
 func (e *ExamplePlugin) Build(core *clay.Core) {

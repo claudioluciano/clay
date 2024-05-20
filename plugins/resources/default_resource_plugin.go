@@ -29,6 +29,7 @@ func (r *DefaultResourcesPlugin) Build(core *clay.Core) {
 	log.Info("Registering default handlers")
 	resource.RegisterHandler("image", ".png", &defaults.PngDefaultHandler{})
 	resource.RegisterHandler("font", ".ttf", &defaults.TtfDefaultHandler{})
+	resource.RegisterHandler("sfx", ".ogg", &defaults.OggDefaultHandler{})
 }
 
 func (r *DefaultResourcesPlugin) Ready(core *clay.Core) {
