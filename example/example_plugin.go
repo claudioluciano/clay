@@ -9,8 +9,6 @@ import (
 	"github.com/leap-fish/clay/components/sprite"
 	"github.com/leap-fish/clay/example/cmd"
 	"github.com/leap-fish/clay/plugins"
-	"github.com/leap-fish/clay/plugins/render"
-	"github.com/leap-fish/clay/plugins/resources"
 	log "github.com/sirupsen/logrus"
 	m "github.com/yohamta/donburi/features/math"
 	"math"
@@ -41,7 +39,7 @@ func (e *ExamplePlugin) Ready(core *clay.Core) {
 	ent := imageSprite.Spawn(core.World)
 	imageEntry := core.World.Entry(ent)
 	spatial.TransformComponent.Set(imageEntry, &spatial.Transform{
-		Position: m.Vec2{0, 0},
+		Position: m.Vec2{},
 		Scale:    0.3,
 	})
 
@@ -49,7 +47,7 @@ func (e *ExamplePlugin) Ready(core *clay.Core) {
 	imageEntry2 := core.World.Entry(ent2)
 	spatial.TransformComponent.Set(imageEntry2, &spatial.Transform{
 		Index:    3,
-		Position: m.Vec2{-100, -100},
+		Position: m.NewVec2(-100, -100),
 		Rotation: 90 * (math.Pi / 180),
 		Scale:    0.1,
 	})
@@ -57,9 +55,7 @@ func (e *ExamplePlugin) Ready(core *clay.Core) {
 
 func (e *ExamplePlugin) Build(core *clay.Core) {
 	core.Plugin(
-		resources.NewDefaultResourcesPlugin("assets", EditorFiles),
-		&plugins.DefaultCameraPlugin{},
-		&render.DefaultRendererPlugin{},
+		plugins.DefaultPlugins(EditorFiles)...,
 	)
 
 	core.SubSystem(&cmd.ExampleSystem{})

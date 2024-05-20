@@ -78,7 +78,9 @@ func (c *Core) SubSystem(systems ...SubSystem) *Core {
 	return c
 }
 
-// LaunchOptions is used to configure the `LaunchOptions` structure used to define certain defaults.
+// LaunchOptions is used to configure the `LaunchOptions` structure
+// which is used to define engine defaults.
+// In LaunchOptions, are things like window size, render scale and so on.
 func (c *Core) LaunchOptions(options LaunchOptions) *Core {
 	c.Options = &options
 	return c
