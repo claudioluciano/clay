@@ -57,9 +57,9 @@ func sortSubSystemSlice[T SubSystem](in []T) []T {
 func (sr *SubSystemRegistry) Add(systems []SubSystem) {
 	// Adds and sorts each system, according to whichever interfaces they actually implement.
 	for _, system := range systems {
-		clientInitializable, canInit := system.(Initializable)
+		initializable, canInit := system.(Initializable)
 		if canInit {
-			sr.Initializables = append(sr.Initializables, clientInitializable)
+			sr.Initializables = append(sr.Initializables, initializable)
 			sr.Initializables = sortSubSystemSlice(sr.Initializables)
 		}
 
