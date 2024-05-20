@@ -3,6 +3,7 @@ package cmd
 import (
 	"bytes"
 	"fmt"
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
 	"github.com/leap-fish/clay"
 	"github.com/leap-fish/clay/bundle"
@@ -32,6 +33,7 @@ func (e *ExampleSystem) Update(w donburi.World, dt time.Duration) {
 
 	t := txt.Component.Get(entry)
 	t.Content.Reset()
+	t.Content.WriteString(fmt.Sprintf("%0.1f FPS, %0.1f TPS\n\n", ebiten.ActualFPS(), ebiten.ActualTPS()))
 	for _, c := range debug.GetEntityCounts(w) {
 		t.Content.WriteString(fmt.Sprintf("> %s\n", c.String()))
 	}

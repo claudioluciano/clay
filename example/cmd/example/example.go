@@ -8,7 +8,5 @@ import (
 func main() {
 	c := clay.New()
 	c.Plugin(&example.ExamplePlugin{})
-
-	c.Build()
 	c.Run()
 }

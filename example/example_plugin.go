@@ -12,7 +12,6 @@ import (
 	log "github.com/sirupsen/logrus"
 	m "github.com/yohamta/donburi/features/math"
 	"math"
-	"time"
 )
 
 var (
@@ -31,9 +30,6 @@ var imageSprite = bundle.New().
 	With(sprite.Component, sprite.Sprite{
 		Path: "image:image",
 	})
-
-func (e *ExamplePlugin) Update(dt time.Duration) {
-}
 
 func (e *ExamplePlugin) Ready(core *clay.Core) {
 	ent := imageSprite.Spawn(core.World)
@@ -65,6 +61,7 @@ func (e *ExamplePlugin) Build(core *clay.Core) {
 		WindowHeight:  *windowHeightFlag,
 		UseDPIScaling: true,
 		RenderScale:   1.0,
+		VsyncMode:     true,
 	})
 	log.Tracef("Window Size set to %dx%d", *windowWidthFlag, *windowHeightFlag)
 }
