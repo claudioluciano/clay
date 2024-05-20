@@ -1,4 +1,4 @@
-package cmd
+package _example
 
 import (
 	"bytes"

@@ -1,12 +1,12 @@
 package main
 
 import (
+	"_example"
 	"github.com/leap-fish/clay"
-	"github.com/leap-fish/clay/example"
 )
 
 func main() {
 	c := clay.New()
-	c.Plugin(&example.ExamplePlugin{})
+	c.Plugin(&_example.ExamplePlugin{})
 	c.Run()
 }

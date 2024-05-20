@@ -1,4 +1,4 @@
-package example
+package _example
 
 import (
 	"embed"
@@ -8,7 +8,6 @@ import (
 	"github.com/leap-fish/clay/components/audio"
 	"github.com/leap-fish/clay/components/spatial"
 	"github.com/leap-fish/clay/components/sprite"
-	"github.com/leap-fish/clay/example/cmd"
 	"github.com/leap-fish/clay/plugins"
 	log "github.com/sirupsen/logrus"
 	m "github.com/yohamta/donburi/features/math"
@@ -72,7 +71,7 @@ func (e *ExamplePlugin) Build(core *clay.Core) {
 		plugins.DefaultPlugins(EditorFiles)...,
 	)
 
-	core.SubSystem(&cmd.ExampleSystem{})
+	core.SubSystem(&ExampleSystem{})
 
 	core.LaunchOptions(clay.LaunchOptions{
 		WindowWidth:   *windowWidthFlag,
