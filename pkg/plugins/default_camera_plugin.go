@@ -1,11 +1,11 @@
 package plugins
 
 import (
-	"github.com/leap-fish/clay"
-	"github.com/leap-fish/clay/bundle"
-	"github.com/leap-fish/clay/components/camera"
-	"github.com/leap-fish/clay/events"
-	"github.com/leap-fish/clay/util/ecsutil"
+	"github.com/leap-fish/clay/pkg"
+	"github.com/leap-fish/clay/pkg/bundle"
+	"github.com/leap-fish/clay/pkg/components/camera"
+	"github.com/leap-fish/clay/pkg/events"
+	"github.com/leap-fish/clay/pkg/util/ecsutil"
 	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/features/math"
@@ -13,10 +13,10 @@ import (
 
 type DefaultCameraPlugin struct{}
 
-func (d *DefaultCameraPlugin) Build(core *clay.Core) {
+func (d *DefaultCameraPlugin) Build(core *pkg.Core) {
 }
 
-func (d *DefaultCameraPlugin) Ready(core *clay.Core) {
+func (d *DefaultCameraPlugin) Ready(core *pkg.Core) {
 	core.World.Create(camera.Component)
 	events.EngineWindowSizeUpdated.Subscribe(core.World,
 		func(w donburi.World, event events.WindowSizeUpdate) {

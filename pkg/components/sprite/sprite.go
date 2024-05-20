@@ -2,7 +2,7 @@ package sprite
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/leap-fish/clay/resource"
+	"github.com/leap-fish/clay/pkg/resource"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/features/math"
 	"image"

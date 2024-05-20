@@ -2,7 +2,7 @@ package audio
 
 import (
 	"github.com/hajimehoshi/ebiten/v2/audio"
-	"github.com/leap-fish/clay/resource"
+	"github.com/leap-fish/clay/pkg/resource"
 	"github.com/yohamta/donburi"
 )
 

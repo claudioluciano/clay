@@ -2,8 +2,8 @@ package game
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/leap-fish/clay"
-	"github.com/leap-fish/clay/config"
+	"github.com/leap-fish/clay/pkg"
+	"github.com/leap-fish/clay/pkg/config"
 	"github.com/yohamta/donburi"
 )
 
@@ -12,7 +12,7 @@ type GameAppProvider struct {
 
 	options *config.LaunchOptions
 
-	game *clay.ClayGame
+	game *pkg.ClayGame
 }
 
 func NewGameAppProvider(options config.LaunchOptions) *GameAppProvider {
@@ -21,9 +21,9 @@ func NewGameAppProvider(options config.LaunchOptions) *GameAppProvider {
 	}
 }
 
-func (g GameAppProvider) Run(world donburi.World, subSystems *clay.SubSystemRegistry, plugins *clay.PluginRegistry) {
+func (g GameAppProvider) Run(world donburi.World, subSystems *pkg.SubSystemRegistry, plugins *pkg.PluginRegistry) {
 	// Initializes the game instance
-	g.game = clay.NewClayGame(world, subSystems, plugins, g.options)
+	g.game = pkg.NewClayGame(world, subSystems, plugins, g.options)
 	g.game.Init()
 
 	err := ebiten.RunGame(g.game)

@@ -1,11 +1,11 @@
-package clay
+package pkg
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/leap-fish/clay/components/dpi"
-	"github.com/leap-fish/clay/config"
-	ev "github.com/leap-fish/clay/events"
-	"github.com/leap-fish/clay/render"
+	"github.com/leap-fish/clay/pkg/components/dpi"
+	"github.com/leap-fish/clay/pkg/config"
+	ev "github.com/leap-fish/clay/pkg/events"
+	"github.com/leap-fish/clay/pkg/render"
 	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/features/events"

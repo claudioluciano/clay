@@ -2,8 +2,8 @@ package audio
 
 import (
 	eaudio "github.com/hajimehoshi/ebiten/v2/audio"
-	"github.com/leap-fish/clay/components/audio"
-	"github.com/leap-fish/clay/resource"
+	"github.com/leap-fish/clay/pkg/components/audio"
+	"github.com/leap-fish/clay/pkg/resource"
 	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/filter"

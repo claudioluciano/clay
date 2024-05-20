@@ -2,7 +2,7 @@ package defaults
 
 import (
 	"github.com/hajimehoshi/ebiten/v2/audio/vorbis"
-	"github.com/leap-fish/clay/plugins/audio"
+	"github.com/leap-fish/clay/pkg/plugins/audio"
 	"io"
 )
 

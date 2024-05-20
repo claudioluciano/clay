@@ -2,7 +2,7 @@ package render
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/leap-fish/clay/components/camera"
+	"github.com/leap-fish/clay/pkg/components/camera"
 )
 
 type DrawOp struct {

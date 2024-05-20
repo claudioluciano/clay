@@ -3,8 +3,8 @@ package render
 import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"github.com/leap-fish/clay/components/camera"
-	"github.com/leap-fish/clay/util/ecsutil"
+	"github.com/leap-fish/clay/pkg/components/camera"
+	"github.com/leap-fish/clay/pkg/util/ecsutil"
 	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
 	"sort"

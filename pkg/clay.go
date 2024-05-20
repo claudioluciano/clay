@@ -1,8 +1,8 @@
-package clay
+package pkg
 
 import (
 	"flag"
-	"github.com/leap-fish/clay/config"
+	"github.com/leap-fish/clay/pkg/config"
 	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/ecs"

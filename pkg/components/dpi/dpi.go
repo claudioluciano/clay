@@ -2,7 +2,7 @@ package dpi
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/leap-fish/clay/util/ecsutil"
+	"github.com/leap-fish/clay/pkg/util/ecsutil"
 	"github.com/yohamta/donburi"
 )
 

@@ -2,12 +2,12 @@ package _example
 
 import (
 	"embed"
-	"github.com/leap-fish/clay"
-	"github.com/leap-fish/clay/bundle"
-	"github.com/leap-fish/clay/components/audio"
-	"github.com/leap-fish/clay/components/spatial"
-	"github.com/leap-fish/clay/components/sprite"
-	"github.com/leap-fish/clay/plugins"
+	"github.com/leap-fish/clay/pkg"
+	"github.com/leap-fish/clay/pkg/bundle"
+	"github.com/leap-fish/clay/pkg/components/audio"
+	"github.com/leap-fish/clay/pkg/components/spatial"
+	"github.com/leap-fish/clay/pkg/components/sprite"
+	"github.com/leap-fish/clay/pkg/plugins"
 	m "github.com/yohamta/donburi/features/math"
 	"math"
 	"time"
@@ -30,7 +30,7 @@ var audioEffect = bundle.New().
 
 type ExamplePlugin struct{}
 
-func (e *ExamplePlugin) Ready(core *clay.Core) {
+func (e *ExamplePlugin) Ready(core *pkg.Core) {
 	ent := imageSprite.Spawn(core.World)
 	imageEntry := core.World.Entry(ent)
 	spatial.TransformComponent.Set(imageEntry, &spatial.Transform{
@@ -59,7 +59,7 @@ func (e *ExamplePlugin) Ready(core *clay.Core) {
 	}()
 }
 
-func (e *ExamplePlugin) Build(core *clay.Core) {
+func (e *ExamplePlugin) Build(core *pkg.Core) {
 	core.Plugin(
 		plugins.DefaultPlugins(EditorFiles)...,
 	)

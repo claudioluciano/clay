@@ -1,8 +1,8 @@
-package clay
+package pkg
 
 import (
 	"cmp"
-	"github.com/leap-fish/clay/render"
+	"github.com/leap-fish/clay/pkg/render"
 	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
 	"reflect"

@@ -3,11 +3,11 @@ package render
 import (
 	"github.com/hajimehoshi/ebiten/v2"
 	txt "github.com/hajimehoshi/ebiten/v2/text/v2"
-	"github.com/leap-fish/clay/components/camera"
-	"github.com/leap-fish/clay/components/dpi"
-	"github.com/leap-fish/clay/components/spatial"
-	"github.com/leap-fish/clay/components/text"
-	"github.com/leap-fish/clay/render"
+	"github.com/leap-fish/clay/pkg/components/camera"
+	"github.com/leap-fish/clay/pkg/components/dpi"
+	"github.com/leap-fish/clay/pkg/components/spatial"
+	"github.com/leap-fish/clay/pkg/components/text"
+	"github.com/leap-fish/clay/pkg/render"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/filter"
 )

@@ -3,9 +3,9 @@ package main
 import (
 	"_example"
 	"flag"
-	"github.com/leap-fish/clay"
-	"github.com/leap-fish/clay/config"
-	"github.com/leap-fish/clay/game"
+	"github.com/leap-fish/clay/pkg"
+	"github.com/leap-fish/clay/pkg/config"
+	"github.com/leap-fish/clay/pkg/game"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -15,7 +15,7 @@ var (
 )
 
 func main() {
-	c := clay.New()
+	c := pkg.New()
 	c.Provider(game.NewGameAppProvider(config.LaunchOptions{
 		WindowWidth:   *windowWidthFlag,
 		WindowHeight:  *windowHeightFlag,
