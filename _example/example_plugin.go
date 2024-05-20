@@ -2,22 +2,15 @@ package _example
 
 import (
 	"embed"
-	"flag"
 	"github.com/leap-fish/clay"
 	"github.com/leap-fish/clay/bundle"
 	"github.com/leap-fish/clay/components/audio"
 	"github.com/leap-fish/clay/components/spatial"
 	"github.com/leap-fish/clay/components/sprite"
 	"github.com/leap-fish/clay/plugins"
-	log "github.com/sirupsen/logrus"
 	m "github.com/yohamta/donburi/features/math"
 	"math"
 	"time"
-)
-
-var (
-	windowWidthFlag  = flag.Int("width", 800, "window width")
-	windowHeightFlag = flag.Int("height", 600, "window height")
 )
 
 //go:embed assets
@@ -70,15 +63,5 @@ func (e *ExamplePlugin) Build(core *clay.Core) {
 	core.Plugin(
 		plugins.DefaultPlugins(EditorFiles)...,
 	)
-
 	core.SubSystem(&ExampleSystem{})
-
-	core.LaunchOptions(clay.LaunchOptions{
-		WindowWidth:   *windowWidthFlag,
-		WindowHeight:  *windowHeightFlag,
-		UseDPIScaling: true,
-		RenderScale:   1.0,
-		VsyncMode:     true,
-	})
-	log.Tracef("Window Size set to %dx%d", *windowWidthFlag, *windowHeightFlag)
 }

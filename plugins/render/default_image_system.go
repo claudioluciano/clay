@@ -2,7 +2,6 @@ package render
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/leap-fish/clay"
 	"github.com/leap-fish/clay/components/camera"
 	"github.com/leap-fish/clay/components/dpi"
 	"github.com/leap-fish/clay/components/spatial"
@@ -25,7 +24,7 @@ func NewDefaultImageSystem() *DefaultImageSystem {
 	}
 }
 
-func (s *DefaultImageSystem) Render(rg *clay.RenderGraph, w donburi.World) {
+func (s *DefaultImageSystem) Render(rg *render.RenderGraph, w donburi.World) {
 	scaleFactor := dpi.GetScaleFactor(w)
 	s.imageQuery.Each(w, func(entry *donburi.Entry) {
 		spr := sprite.Component.Get(entry)

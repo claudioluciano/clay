@@ -2,6 +2,7 @@ package clay
 
 import (
 	"cmp"
+	"github.com/leap-fish/clay/render"
 	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
 	"reflect"
@@ -16,7 +17,7 @@ type Initializable interface {
 }
 
 type Renderable interface {
-	Render(rg *RenderGraph, w donburi.World)
+	Render(rg *render.RenderGraph, w donburi.World)
 }
 
 type Updatable interface {

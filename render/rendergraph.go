@@ -1,4 +1,4 @@
-package clay
+package render
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"

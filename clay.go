@@ -2,7 +2,7 @@ package clay
 
 import (
 	"flag"
-	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/leap-fish/clay/config"
 	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/ecs"
@@ -10,39 +10,6 @@ import (
 
 var levelFlag = flag.Int("logging", int(log.InfoLevel), "Sets the logging level of the engine in Logrus levels (0 to 6).")
 var loggingColors = flag.Bool("logcolors", false, "Whether logging will have colors enabled")
-
-// LaunchOptions is a simple struct that holds a standard set of launch Options that the user may change.
-type LaunchOptions struct {
-
-	// Physical window width in pixels.
-	WindowWidth int
-
-	// Physical window height in pixels.
-	WindowHeight int
-
-	// RenderScale determines the factor at which rendering is scaled at. 2.0 will result in every pixel taking two pixels
-	// on screen.
-	RenderScale float64
-
-	// UseDPIScaling enables automatic scaling depending on monitor DPI, and is calculated using the ebitengine
-	// API. This should make rendering look identical on different type of screens, such as a 4k "Retina" screen
-	// compared to a normal 1080p screen. If you are making a typical "pixel game", you may want to leave this `false`,
-	//as this can cause rendering to be blurred.
-	UseDPIScaling bool
-
-	// VsyncMode will restrict rendering to your monitor refresh rate,
-	// or whether to use ebiten's own rendering scheduling.
-	VsyncMode bool
-}
-
-// DefaultLaunchOptions is just some reasonably sane default launch options, available for use.
-var DefaultLaunchOptions = LaunchOptions{
-	WindowWidth:   1920,
-	WindowHeight:  1080,
-	RenderScale:   1,
-	UseDPIScaling: true,
-	VsyncMode:     true,
-}
 
 // Core holds subsystems for Clay.
 // This struct contains most relevant methods of implementing features for a Clay based application.
@@ -54,15 +21,12 @@ type Core struct {
 	// Shortcut to ECS.World
 	World donburi.World
 
-	// Used for rendering
-	RenderGraph *RenderGraph
-
 	PluginRegistry    *PluginRegistry
 	SubSystemRegistry *SubSystemRegistry
 
-	Game *ClayGame
+	Options config.LaunchOptions
 
-	Options *LaunchOptions
+	provider AppProvider
 }
 
 func New() *Core {
@@ -77,14 +41,7 @@ func New() *Core {
 	core := &Core{
 		ECS:               ecsInstance,
 		World:             world,
-		RenderGraph:       &RenderGraph{},
 		SubSystemRegistry: &SubSystemRegistry{},
-		Options: &LaunchOptions{
-			WindowWidth:   800,
-			WindowHeight:  600,
-			UseDPIScaling: true,
-			RenderScale:   1.0,
-		},
 	}
 
 	core.PluginRegistry = NewPluginRegistry(core)
@@ -107,11 +64,8 @@ func (c *Core) SubSystem(systems ...SubSystem) *Core {
 	return c
 }
 
-// LaunchOptions is used to configure the `LaunchOptions` structure
-// which is used to define engine defaults.
-// In LaunchOptions, are things like window size, render scale and other fundamental options.
-func (c *Core) LaunchOptions(options LaunchOptions) *Core {
-	c.Options = &options
+func (c *Core) Provider(provider AppProvider) *Core {
+	c.provider = provider
 	return c
 }
 
@@ -121,7 +75,7 @@ func (c *Core) build() {
 	c.PluginRegistry.BuildPlugins()
 }
 
-// Run is used to actually launch the underlying Ebitengine instance, with the added clay subsystems and configuration.
+// Run is used to actually launch the underlying app provider instance, with the added clay subsystems and configuration.
 // Make sure you call `Core.Build()` beforehand.
 func (c *Core) Run() {
 	c.build()
@@ -130,20 +84,10 @@ func (c *Core) Run() {
 		plugin.Ready(c)
 	}
 
-	// Defaults set by ebiten
-	ebiten.SetWindowSize(c.Options.WindowWidth, c.Options.WindowHeight)
-	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
-	ebiten.SetVsyncEnabled(c.Options.VsyncMode)
-
-	// Initializes the game instance
-	c.Game = &ClayGame{
-		Core:  c,
-		World: c.World,
+	if c.provider == nil {
+		log.Error("Cannot start Clay without provider. Call Provider() with a valid AppProvider instance.")
+		return
 	}
 
-	c.Game.Init()
-	err := ebiten.RunGame(c.Game)
-	if err != nil {
-		panic(err)
-	}
+	c.provider.Run(c.World, c.SubSystemRegistry, c.PluginRegistry)
 }

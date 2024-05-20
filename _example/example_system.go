@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
-	"github.com/leap-fish/clay"
 	"github.com/leap-fish/clay/bundle"
 	"github.com/leap-fish/clay/components/spatial"
 	txt "github.com/leap-fish/clay/components/text"
+	"github.com/leap-fish/clay/render"
 	"github.com/leap-fish/clay/resource"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/features/debug"
@@ -73,4 +73,4 @@ func (e *ExampleSystem) Init(w donburi.World) {
 	secondText.Spawn(w)
 }
 
-func (e *ExampleSystem) Render(rg *clay.RenderGraph, w donburi.World) {}
+func (e *ExampleSystem) Render(rg *render.RenderGraph, w donburi.World) {}
