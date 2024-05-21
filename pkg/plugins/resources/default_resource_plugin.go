@@ -39,6 +39,6 @@ func (r *DefaultResourcesPlugin) Ready(core *clay.Core) {
 			WithField("errors", resourceErrs).
 			WithField("path", r.Path).
 			WithField("fs", r.FileSystem).
-			Errorf("Unable to load %d files from embedded file system", len(resourceErrs))
+			Warnf("Unable to load %d files from embedded file system", len(resourceErrs))
 	}
 }
