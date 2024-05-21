@@ -1,7 +1,8 @@
-package pkg
+package game
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/leap-fish/clay/pkg/clay"
 	"github.com/leap-fish/clay/pkg/components/dpi"
 	"github.com/leap-fish/clay/pkg/config"
 	ev "github.com/leap-fish/clay/pkg/events"
@@ -19,8 +20,8 @@ type ClayGame struct {
 	//Core       *Core
 	World donburi.World
 
-	subSystems *SubSystemRegistry
-	plugins    *PluginRegistry
+	subSystems *clay.SubSystemRegistry
+	plugins    *clay.PluginRegistry
 
 	// Used for rendering
 	RenderGraph *render.RenderGraph
@@ -28,7 +29,7 @@ type ClayGame struct {
 	Options *config.LaunchOptions
 }
 
-func NewClayGame(w donburi.World, subSystems *SubSystemRegistry, plugins *PluginRegistry, options *config.LaunchOptions) *ClayGame {
+func NewClayGame(w donburi.World, subSystems *clay.SubSystemRegistry, plugins *clay.PluginRegistry, options *config.LaunchOptions) *ClayGame {
 	return &ClayGame{
 		ScrW:        0,
 		ScrH:        0,

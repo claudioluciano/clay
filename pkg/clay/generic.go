@@ -1,4 +1,4 @@
-package pkg
+package clay
 
 import "github.com/yohamta/donburi"
 

@@ -1,7 +1,7 @@
 package render
 
 import (
-	"github.com/leap-fish/clay/pkg"
+	"github.com/leap-fish/clay/pkg/clay"
 	"github.com/leap-fish/clay/pkg/components/camera"
 	"github.com/leap-fish/clay/pkg/components/dpi"
 	"github.com/yohamta/donburi"
@@ -15,14 +15,14 @@ type DefaultRendererPlugin struct {
 	spriteQuery *donburi.Query
 }
 
-func (d *DefaultRendererPlugin) Build(core *pkg.Core) {
+func (d *DefaultRendererPlugin) Build(core *clay.Core) {
 	core.SubSystem(
 		NewDefaultImageSystem(),
 		NewDefaultTextSystem(),
 	)
 }
 
-func (d *DefaultRendererPlugin) Ready(core *pkg.Core) {
+func (d *DefaultRendererPlugin) Ready(core *clay.Core) {
 	if core.Options.UseDPIScaling {
 		core.World.Create(dpi.Component)
 	}
