@@ -27,6 +27,10 @@ type Transform struct {
 	Scale    float64
 }
 
+func (w Transform) Order() int {
+	return w.Index
+}
+
 func (w *Transform) Forward() m.Vec2 {
 	return m.NewVec2(1, 0).
 		Rotate(w.Rotation - radianRotationOffsetHalfCircle)

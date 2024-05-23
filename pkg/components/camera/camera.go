@@ -83,6 +83,7 @@ func (c *Camera) GetWorldCoords(x, y float64) (float64, float64) {
 	w, h := c.Width, c.Height
 
 	x, y = x-float64(w)/2, y-float64(h)/2
+	x, y = x*c.Scale, y*c.Scale
 
 	// Translate the coordinates
 	x += float64(w) / 2

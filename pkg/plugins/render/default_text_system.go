@@ -13,14 +13,14 @@ import (
 )
 
 type DefaultTextSystem struct {
-	textQuery *donburi.Query
+	textQuery *donburi.OrderedQuery[spatial.Transform]
 
 	op *txt.DrawOptions
 }
 
 func NewDefaultTextSystem() *DefaultTextSystem {
 	return &DefaultTextSystem{
-		textQuery: donburi.NewQuery(
+		textQuery: donburi.NewOrderedQuery[spatial.Transform](
 			filter.Contains(text.Component, spatial.TransformComponent)),
 		op: &txt.DrawOptions{},
 	}
@@ -28,7 +28,7 @@ func NewDefaultTextSystem() *DefaultTextSystem {
 
 func (s *DefaultTextSystem) Render(rg *render.RenderGraph, w donburi.World) {
 	scaleFactor := dpi.GetScaleFactor(w)
-	s.textQuery.Each(w, func(entry *donburi.Entry) {
+	s.textQuery.EachOrdered(w, spatial.TransformComponent, func(entry *donburi.Entry) {
 		t := text.Component.Get(entry)
 		tf := spatial.TransformComponent.Get(entry)
 

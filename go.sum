@@ -30,8 +30,8 @@ github.com/sirupsen/logrus v1.9.3/go.mod h1:naHLuLoDiP4jHNo9R0sCBMtWGeIprob74mVs
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.7.0 h1:nwc3DEeHmmLAfoZucVR881uASk0Mfjw8xYJ99tb5CcY=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
-github.com/yohamta/donburi v1.4.2 h1:E0kV235IzNojO2zNk/1PSU5EljtzHIG5gPsJtsf9330=
-github.com/yohamta/donburi v1.4.2/go.mod h1:cx7C0ucl1ugqXSR+OpaCgfezWJXxh7BjTceaTxzO+3E=
+github.com/yohamta/donburi v1.4.3 h1:W/j1RyHurMJvFFOFJ0ZXl3WutLmpMV43Be6yBucsd4Q=
+github.com/yohamta/donburi v1.4.3/go.mod h1:cx7C0ucl1ugqXSR+OpaCgfezWJXxh7BjTceaTxzO+3E=
 golang.org/x/image v0.15.0 h1:kOELfmgrmJlw4Cdb7g/QGuB3CvDrXbqEIww/pNtNBm8=
 golang.org/x/image v0.15.0/go.mod h1:HUYqC05R2ZcZ3ejNQsIHQDQiwWM4JBqmm6MKANTp4LE=
 golang.org/x/sync v0.6.0 h1:5BMeUDZ7vkXGfEr1x9B4bRcTH4lpkTkpdh0T/J+qjbQ=
