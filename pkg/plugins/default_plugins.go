@@ -13,9 +13,9 @@ import (
 // DefaultPlugins includes the resource loading system, camera system and rendering + audio systems.
 // This provides some basics so you don't need to reinvent these unless your needs exceed that of the default
 // implementation.
-func DefaultPlugins(fs embed.FS) []clay.Plugin {
+func DefaultPlugins(fs embed.FS, defaultDir string) []clay.Plugin {
 	return []clay.Plugin{
-		resources.NewDefaultResourcesPlugin("assets", fs),
+		resources.NewDefaultResourcesPlugin(defaultDir, fs),
 		&DefaultCameraPlugin{},
 		&audio.DefaultAudioPlugin{},
 		&render.DefaultRendererPlugin{},

@@ -32,7 +32,9 @@ func (l *loader) handleResourceType(prefix string, extension string, handler Res
 }
 
 func (l *loader) loadFromFs(directory string, fs embed.FS) []error {
-	l.resources = make(map[Path]LoadedResource)
+	if l.resources == nil {
+		l.resources = make(map[Path]LoadedResource)
+	}
 
 	log.WithField("directory", directory).Trace("Loading from directory")
 	var errs []error
