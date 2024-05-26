@@ -41,7 +41,7 @@ func (s *DefaultTextSystem) Render(rg *render.RenderGraph, w donburi.World) {
 		op.ColorScale.ScaleWithColor(t.Color)
 		op.LineSpacing = (t.Size * scaleFactor) * t.LineHeight
 		op.PrimaryAlign = t.PrimaryAlign
-		op.PrimaryAlign = t.SecondaryAlign
+		op.SecondaryAlign = t.SecondaryAlign
 		op.GeoM.Translate(tf.Position.XY())
 
 		rg.Add(func(world donburi.World, img *ebiten.Image, cam *camera.Camera) {
