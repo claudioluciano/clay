@@ -19,5 +19,8 @@ type Text struct {
 	// Set this to 1.0 if you're unsure.
 	LineHeight float64
 
+	PrimaryAlign   text.Align
+	SecondaryAlign text.Align
+
 	Color color.RGBA
 }
