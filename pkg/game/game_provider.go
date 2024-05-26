@@ -16,6 +16,7 @@ type GameAppProvider struct {
 }
 
 func NewGameAppProvider(options config.LaunchOptions) *GameAppProvider {
+	clay.LaunchOptions = &options
 	return &GameAppProvider{
 		options: &options,
 	}

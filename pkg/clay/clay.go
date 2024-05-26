@@ -11,6 +11,8 @@ import (
 var levelFlag = flag.Int("logging", int(log.InfoLevel), "Sets the logging level of the engine in Logrus levels (0 to 6).")
 var loggingColors = flag.Bool("logcolors", true, "Whether logging will have colors enabled")
 
+var LaunchOptions *config.LaunchOptions
+
 // Core holds subsystems for Clay.
 // This struct contains most relevant methods of implementing features for a Clay based application.
 type Core struct {
@@ -23,8 +25,6 @@ type Core struct {
 
 	PluginRegistry    *PluginRegistry
 	SubSystemRegistry *SubSystemRegistry
-
-	Options config.LaunchOptions
 
 	provider AppProvider
 }

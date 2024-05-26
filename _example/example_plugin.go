@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-//go:embed assets
+//go:embed assets/*
 var EditorFiles embed.FS
 
 var imageSprite = bundle.New().
@@ -61,7 +61,7 @@ func (e *ExamplePlugin) Ready(core *clay.Core) {
 
 func (e *ExamplePlugin) Build(core *clay.Core) {
 	core.Plugin(
-		plugins.DefaultPlugins(EditorFiles)...,
+		plugins.DefaultPlugins(EditorFiles, ".")...,
 	)
 	core.SubSystem(&ExampleSystem{})
 }
