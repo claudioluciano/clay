@@ -69,7 +69,7 @@ func (e *ExampleSystem) Init(w donburi.World) {
 			Content:    bytes.Buffer{},
 			Size:       16,
 			LineHeight: 1.0,
-			Color:      color.RGBA{255, 255, 255, 255},
+			Color:      color.NRGBA{255, 255, 255, 255},
 		}).
 		With(DebugMarker, struct{}{})
 
@@ -84,7 +84,7 @@ func (e *ExampleSystem) Init(w donburi.World) {
 			Content:    secondTextBuf,
 			Size:       16,
 			LineHeight: 1.0,
-			Color:      color.RGBA{255, 100, 100, 255},
+			Color:      color.NRGBA{255, 100, 100, 255},
 		}).
 		With(DebugMarker, struct{}{})
 

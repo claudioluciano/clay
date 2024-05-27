@@ -22,5 +22,5 @@ type Text struct {
 	PrimaryAlign   text.Align
 	SecondaryAlign text.Align
 
-	Color color.RGBA
+	Color color.NRGBA
 }

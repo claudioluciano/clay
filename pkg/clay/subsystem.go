@@ -24,6 +24,12 @@ type Updatable interface {
 	Update(w donburi.World, dt time.Duration)
 }
 
+type FullSubSystem interface {
+	Initializable
+	Updatable
+	Renderable
+}
+
 type SubSystemRegistry struct {
 	SubSystems []SubSystem
 
