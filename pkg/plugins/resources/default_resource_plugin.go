@@ -3,7 +3,7 @@ package resources
 import (
 	"embed"
 	"github.com/leap-fish/clay/pkg/clay"
-	defaults2 "github.com/leap-fish/clay/pkg/plugins/resources/defaults"
+	defaults "github.com/leap-fish/clay/pkg/plugins/resources/defaults"
 	"github.com/leap-fish/clay/pkg/resource"
 	log "github.com/sirupsen/logrus"
 	"math"
@@ -27,9 +27,10 @@ func (r *DefaultResourcesPlugin) Order() int {
 
 func (r *DefaultResourcesPlugin) Build(core *clay.Core) {
 	log.Info("Registering default handlers")
-	resource.RegisterHandler("image", ".png", &defaults2.PngDefaultHandler{})
-	resource.RegisterHandler("font", ".ttf", &defaults2.TtfDefaultHandler{})
-	resource.RegisterHandler("sfx", ".ogg", &defaults2.OggDefaultHandler{})
+	resource.RegisterHandler("shader", ".kage", &defaults.KageDefaultHandler{})
+	resource.RegisterHandler("image", ".png", &defaults.PngDefaultHandler{})
+	resource.RegisterHandler("font", ".ttf", &defaults.TtfDefaultHandler{})
+	resource.RegisterHandler("sfx", ".ogg", &defaults.OggDefaultHandler{})
 }
 
 func (r *DefaultResourcesPlugin) Ready(core *clay.Core) {
