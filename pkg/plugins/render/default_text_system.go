@@ -8,21 +8,19 @@ import (
 	"github.com/leap-fish/clay/pkg/components/spatial"
 	"github.com/leap-fish/clay/pkg/components/text"
 	"github.com/leap-fish/clay/pkg/render"
+	"github.com/leap-fish/clay/pkg/resource"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/filter"
 )
 
 type DefaultTextSystem struct {
 	textQuery *donburi.OrderedQuery[spatial.Transform]
-
-	op *txt.DrawOptions
 }
 
 func NewDefaultTextSystem() *DefaultTextSystem {
 	return &DefaultTextSystem{
 		textQuery: donburi.NewOrderedQuery[spatial.Transform](
 			filter.Contains(text.Component, spatial.TransformComponent)),
-		op: &txt.DrawOptions{},
 	}
 }
 
@@ -31,9 +29,8 @@ func (s *DefaultTextSystem) Render(rg *render.RenderGraph, w donburi.World) {
 	s.textQuery.EachOrdered(w, spatial.TransformComponent, func(entry *donburi.Entry) {
 		t := text.Component.Get(entry)
 		tf := spatial.TransformComponent.Get(entry)
-
 		face := &txt.GoTextFace{
-			Source: t.Source,
+			Source: resource.Get[*txt.GoTextFaceSource](t.Path),
 			Size:   t.Size * scaleFactor,
 		}
 
