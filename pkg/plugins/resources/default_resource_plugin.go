@@ -36,8 +36,10 @@ func (r *DefaultResourcesPlugin) Build(core *clay.Core) {
 func (r *DefaultResourcesPlugin) Ready(core *clay.Core) {
 	resourceErrs := resource.LoadFromEmbedFolder(r.Path, r.FileSystem)
 	if len(resourceErrs) > 0 {
+		for _, err := range resourceErrs {
+			log.WithError(err).Error("File load failed")
+		}
 		log.
-			WithField("errors", resourceErrs).
 			WithField("path", r.Path).
 			WithField("fs", r.FileSystem).
 			Warnf("Unable to load %d files from embedded file system", len(resourceErrs))

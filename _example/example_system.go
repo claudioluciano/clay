@@ -11,7 +11,6 @@ import (
 	"github.com/leap-fish/clay/pkg/components/sprite"
 	txt "github.com/leap-fish/clay/pkg/components/text"
 	"github.com/leap-fish/clay/pkg/render"
-	"github.com/leap-fish/clay/pkg/resource"
 	"github.com/leap-fish/clay/pkg/util/ecsutil"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/features/debug"
@@ -58,14 +57,13 @@ func (e *ExampleSystem) Update(w donburi.World, dt time.Duration) {
 }
 
 func (e *ExampleSystem) Init(w donburi.World) {
-	e.font = resource.Get[*text.GoTextFaceSource]("font:BaiJamjuree-Regular")
 
 	DebugMarker.SetName("DebugMarker")
 
 	textBundle := bundle.New().
 		With(spatial.TransformComponent, spatial.DefaultTransform).
 		With(txt.Component, txt.Text{
-			Source:     e.font,
+			Path:       "font:BaiJamjuree-Regular",
 			Content:    bytes.Buffer{},
 			Size:       16,
 			LineHeight: 1.0,
@@ -80,7 +78,7 @@ func (e *ExampleSystem) Init(w donburi.World) {
 	secondText := bundle.New().
 		With(spatial.TransformComponent, spatial.Transform{Position: math.NewVec2(200, 200), Scale: 1.0}).
 		With(txt.Component, txt.Text{
-			Source:     e.font,
+			Path:       "font:BaiJamjuree-Regular",
 			Content:    secondTextBuf,
 			Size:       16,
 			LineHeight: 1.0,
