@@ -70,8 +70,8 @@ func (e *ExampleSystem) Init(w donburi.World) {
 				"idle",
 				animsprite.SpriteSheetSize{FrameHeight: 32, FrameWidth: 32, ImageWidth: 416, ImageHeight: 256},
 				map[string]*animsprite.Animation{
-					"idle": animsprite.NewAnimation(time.Millisecond*100, "1-13", 1),
-					"run":  animsprite.NewAnimation(time.Millisecond*100, "1-8", 2),
+					"idle": animsprite.NewAnimation(time.Millisecond*120, "1-13", 1),
+					"run":  animsprite.NewAnimation(time.Millisecond*50, "1-8", 2),
 				},
 				ebiten.FilterNearest,
 			))

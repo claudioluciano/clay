@@ -63,5 +63,6 @@ func (e *ExamplePlugin) Build(core *clay.Core) {
 	core.Plugin(
 		plugins.DefaultPlugins(EditorFiles, ".")...,
 	)
-	core.SubSystem(&ExampleSystem{})
+
+	core.SubSystem(&ExampleSystem{}, &ExampleCameraSystem{})
 }
