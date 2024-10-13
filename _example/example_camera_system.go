@@ -5,7 +5,6 @@ import (
 	"github.com/leap-fish/clay/pkg/clay"
 	"github.com/leap-fish/clay/pkg/components/camera"
 	"github.com/leap-fish/clay/pkg/util/ecsutil"
-	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/features/math"
 	"time"
@@ -20,7 +19,6 @@ func (e *ExampleCameraSystem) Ready(core *clay.Core) {
 }
 
 func (e *ExampleCameraSystem) Update(w donburi.World, dt time.Duration) {
-	log.Info("Updating camera")
 	cam := ecsutil.FirstOf[camera.Camera](camera.Component, w)
 	if cam == nil {
 		return
