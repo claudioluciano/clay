@@ -21,5 +21,6 @@ type Sprite struct {
 	CustomSize *math.Vec2
 	CustomRect *image.Rectangle
 
+	Filter ebiten.Filter
 	Source *ebiten.Image
 }

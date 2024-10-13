@@ -19,6 +19,7 @@ type DefaultRendererPlugin struct {
 func (d *DefaultRendererPlugin) Build(core *clay.Core) {
 	core.SubSystem(
 		NewDefaultImageSystem(),
+		NewDefaultAnimSpriteSystem(),
 		NewDefaultTextSystem(),
 	)
 }

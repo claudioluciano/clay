@@ -35,6 +35,7 @@ func Get[T any](path Path) T {
 	var result T
 	value, ok := loaderInstance.resources[path]
 	if !ok {
+		log.Error("Attempted to load resource, which was unavailable: ", path)
 		return result
 	}
 	return value.instance.(T)

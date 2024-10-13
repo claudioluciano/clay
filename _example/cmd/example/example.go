@@ -20,7 +20,7 @@ func main() {
 		WindowWidth:   *windowWidthFlag,
 		WindowHeight:  *windowHeightFlag,
 		UseDPIScaling: true,
-		RenderScale:   1.0,
+		RenderScale:   1,
 		VsyncMode:     true,
 	}))
 	log.Tracef("Window Size set to %dx%d", *windowWidthFlag, *windowHeightFlag)

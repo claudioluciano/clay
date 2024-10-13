@@ -8,3 +8,5 @@ type WindowSizeUpdate struct {
 }
 
 var EngineWindowSizeUpdated = events.NewEventType[WindowSizeUpdate]()
+
+var ResourcePluginLoaded = events.NewEventType[int]()

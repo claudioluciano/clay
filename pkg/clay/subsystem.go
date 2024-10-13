@@ -68,7 +68,7 @@ func (sr *SubSystemRegistry) Add(systems []SubSystem) {
 			sr.Initializables = append(sr.Initializables, initializable)
 			sr.Initializables = sortSubSystemSlice(sr.Initializables)
 		}
-
+		
 		renderable, canRender := system.(Renderable)
 		if canRender {
 			sr.Renderables = append(sr.Renderables, renderable)

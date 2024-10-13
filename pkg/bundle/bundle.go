@@ -1,6 +1,7 @@
 package bundle
 
 import (
+	"fmt"
 	"github.com/yohamta/donburi"
 	"reflect"
 	"unsafe"
@@ -28,7 +29,7 @@ func (a *Bundle) Spawn(w donburi.World) donburi.Entity {
 
 func (a *Bundle) componentFromVal(ctype donburi.IComponentType, value interface{}) unsafe.Pointer {
 	if reflect.TypeOf(value) != ctype.Typ() {
-		panic("Type assertion failed")
+		panic(fmt.Sprintf("Type assertion failed %s vs: %s", ctype.Typ().String(), reflect.TypeOf(value)))
 	}
 	newVal := reflect.New(ctype.Typ()).Elem()
 	newVal.Set(reflect.ValueOf(value))
