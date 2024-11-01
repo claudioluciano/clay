@@ -1,12 +1,14 @@
 package main
 
 import (
-	"_example"
 	"flag"
+
+	"_example"
+
 	"github.com/leap-fish/clay/pkg/clay"
 	"github.com/leap-fish/clay/pkg/config"
 	"github.com/leap-fish/clay/pkg/game"
-	log "github.com/sirupsen/logrus"
+	log "github.com/leap-fish/clay/pkg/logger"
 )
 
 var (
@@ -23,7 +25,8 @@ func main() {
 		RenderScale:   1,
 		VsyncMode:     true,
 	}))
-	log.Tracef("Window Size set to %dx%d", *windowWidthFlag, *windowHeightFlag)
+	log.Trace().Caller().Msgf("Window Size set to %dx%d", *windowWidthFlag, *windowHeightFlag)
 	c.Plugin(&_example.ExamplePlugin{})
+	log.SetLogger(&_example.MyLogger{})
 	c.Run()
 }

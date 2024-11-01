@@ -2,14 +2,22 @@ package clay
 
 import (
 	"flag"
+
 	"github.com/leap-fish/clay/pkg/config"
-	log "github.com/sirupsen/logrus"
+	log "github.com/leap-fish/clay/pkg/logger"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/ecs"
 )
 
-var levelFlag = flag.Int("logging", int(log.InfoLevel), "Sets the logging level of the engine in Logrus levels (0 to 6).")
-var loggingColors = flag.Bool("logcolors", true, "Whether logging will have colors enabled")
+var (
+	levelFlag = flag.Int(
+		"logging",
+		int(log.InfoLevel),
+		"Sets the logging level of the engine in log levels (-1 to 6).",
+	)
+
+	loggingColors = flag.Bool("logcolors", true, "Whether logging will have colors enabled")
+)
 
 var LaunchOptions *config.LaunchOptions
 
@@ -33,7 +41,7 @@ func New() *Core {
 	flag.Parse()
 
 	log.SetLevel(log.Level(*levelFlag))
-	log.SetFormatter(&log.TextFormatter{ForceColors: *loggingColors})
+	log.EnableColors(*loggingColors)
 
 	world := donburi.NewWorld()
 	ecsInstance := ecs.NewECS(world)
@@ -85,7 +93,8 @@ func (c *Core) Run() {
 	}
 
 	if c.provider == nil {
-		log.Fatal("Clay Core.Run() was called without setting AppProvider using Core.Provider() first")
+		log.Fatal().
+			Msg("Clay Core.Run() was called without setting AppProvider using Core.Provider() first")
 		return
 	}
 

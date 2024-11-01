@@ -5,8 +5,8 @@ import (
 	"github.com/leap-fish/clay/pkg/clay"
 	"github.com/leap-fish/clay/pkg/components/camera"
 	"github.com/leap-fish/clay/pkg/events"
+	log "github.com/leap-fish/clay/pkg/logger"
 	"github.com/leap-fish/clay/pkg/util/ecsutil"
-	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/features/math"
 )
@@ -27,7 +27,7 @@ func (d *DefaultCameraPlugin) Ready(core *clay.Core) {
 				cameraBundle.Spawn(w)
 			}
 			cam.Resize(event.Width, event.Height)
-			log.Info("Camera resized: ", event)
+			log.Info().Msgf("Camera resized: %#v", event)
 		},
 	)
 }

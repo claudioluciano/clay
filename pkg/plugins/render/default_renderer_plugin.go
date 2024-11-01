@@ -4,7 +4,7 @@ import (
 	"github.com/leap-fish/clay/pkg/clay"
 	"github.com/leap-fish/clay/pkg/components/camera"
 	"github.com/leap-fish/clay/pkg/components/dpi"
-	log "github.com/sirupsen/logrus"
+	log "github.com/leap-fish/clay/pkg/logger"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/ecs"
 )
@@ -26,7 +26,7 @@ func (d *DefaultRendererPlugin) Build(core *clay.Core) {
 
 func (d *DefaultRendererPlugin) Ready(core *clay.Core) {
 	if clay.LaunchOptions.UseDPIScaling {
-		log.Trace("Created DPI scaler component")
+		log.Trace().Msg("Created DPI scaler component")
 		core.World.Create(dpi.Component)
 	}
 }

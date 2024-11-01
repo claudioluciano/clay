@@ -1,23 +1,24 @@
 package game
 
 import (
+	"math"
+	"time"
+
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/leap-fish/clay/pkg/clay"
 	"github.com/leap-fish/clay/pkg/components/dpi"
 	"github.com/leap-fish/clay/pkg/config"
 	ev "github.com/leap-fish/clay/pkg/events"
+	log "github.com/leap-fish/clay/pkg/logger"
 	"github.com/leap-fish/clay/pkg/render"
-	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/features/events"
-	"math"
-	"time"
 )
 
 type ClayGame struct {
 	ScrW, ScrH int
 
-	//Core       *Core
+	// Core       *Core
 	World donburi.World
 
 	subSystems *clay.SubSystemRegistry
@@ -29,7 +30,12 @@ type ClayGame struct {
 	Options *config.LaunchOptions
 }
 
-func NewClayGame(w donburi.World, subSystems *clay.SubSystemRegistry, plugins *clay.PluginRegistry, options *config.LaunchOptions) *ClayGame {
+func NewClayGame(
+	w donburi.World,
+	subSystems *clay.SubSystemRegistry,
+	plugins *clay.PluginRegistry,
+	options *config.LaunchOptions,
+) *ClayGame {
 	return &ClayGame{
 		ScrW:        0,
 		ScrH:        0,
@@ -59,7 +65,7 @@ func (g *ClayGame) Update() error {
 	events.ProcessAllEvents(g.World)
 
 	for _, updatable := range g.subSystems.Updatables {
-		//g.Core.RenderGraph.Add(updatable.Render, i)
+		// g.Core.RenderGraph.Add(updatable.Render, i)
 		updatable.Update(g.World, time.Second/time.Duration(ebiten.TPS()))
 	}
 
@@ -88,12 +94,15 @@ func (g *ClayGame) Layout(outsideWidth, outsideHeight int) (screenWidth, screenH
 		})
 		g.ScrW = newW
 		g.ScrH = newH
-		log.
-			WithField("windowWidth", g.ScrW).
-			WithField("windowHeight", g.ScrH).
-			WithField("renderScale", renderScale).
-			WithField("dpiScaleFactor", dpiScaleFactor).
-			Trace("Layout size has changed")
+		log.Trace().
+			Caller().
+			Field(
+				log.Field("windowWidth", g.ScrW),
+				log.Field("windowHeight", g.ScrH),
+				log.Field("renderScale", renderScale),
+				log.Field("dpiScaleFactor", dpiScaleFactor),
+			).
+			Msg("Layout size has changed")
 	}
 
 	return g.ScrW, g.ScrH

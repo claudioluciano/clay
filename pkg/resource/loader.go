@@ -3,11 +3,12 @@ package resource
 import (
 	"embed"
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"io/fs"
 	"path"
 	"reflect"
 	"strings"
+
+	log "github.com/leap-fish/clay/pkg/logger"
 )
 
 // resourceHandler is an internal intermediate struct which stores the prefix, extension and handler types for the loader.
@@ -36,7 +37,12 @@ func (l *loader) loadFromFs(directory string, fs embed.FS) []error {
 		l.resources = make(map[Path]LoadedResource)
 	}
 
-	log.WithField("directory", directory).Trace("Loading from directory")
+	log.Trace().
+		Caller().
+		Field(
+			log.Field("directory", directory),
+		).
+		Msg("Loading from directory")
 	var errs []error
 
 	dir, readErr := fs.ReadDir(directory)
@@ -68,7 +74,11 @@ func (l *loader) loadFromFs(directory string, fs embed.FS) []error {
 func (l *loader) addResource(path Path, instance any) error {
 	existing, exists := l.resources[path]
 	if exists {
-		return fmt.Errorf("can not add resource at path %s because it already exists (typeof %s)", path, reflect.TypeOf(existing))
+		return fmt.Errorf(
+			"can not add resource at path %s because it already exists (typeof %s)",
+			path,
+			reflect.TypeOf(existing),
+		)
 	}
 
 	l.resources[path] = LoadedResource{
@@ -95,7 +105,12 @@ func (l *loader) handleFileFromDir(entry fs.DirEntry, directory string, fs embed
 
 		instance, handlerErr := h.handler.Load(file)
 		if handlerErr != nil {
-			return fmt.Errorf("handler %s returned error for file path %s: %w", reflect.TypeOf(h.handler), loadPath, handlerErr)
+			return fmt.Errorf(
+				"handler %s returned error for file path %s: %w",
+				reflect.TypeOf(h.handler),
+				loadPath,
+				handlerErr,
+			)
 		}
 		name := strings.Split(entry.Name(), ".")
 		prefixedPath := Path(fmt.Sprintf("%s:%s", h.prefix, name[0]))
@@ -105,7 +120,9 @@ func (l *loader) handleFileFromDir(entry fs.DirEntry, directory string, fs embed
 			return fmt.Errorf("can not add resource: %w", addResourceErr)
 		}
 		handled = true
-		log.Tracef("Added resource %s of type %s", prefixedPath, reflect.TypeOf(instance))
+		log.Trace().
+			Caller().
+			Msgf("Added resource %s of type %s", prefixedPath, reflect.TypeOf(instance))
 	}
 
 	if !handled {

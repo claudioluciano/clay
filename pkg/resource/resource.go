@@ -2,8 +2,9 @@ package resource
 
 import (
 	"embed"
-	log "github.com/sirupsen/logrus"
 	"io"
+
+	log "github.com/leap-fish/clay/pkg/logger"
 )
 
 var loaderInstance = loader{}
@@ -26,7 +27,9 @@ func RegisterHandler(prefix string, extension string, handler ResourceHandler) {
 }
 
 func LoadFromEmbedFolder(directory string, fs embed.FS) []error {
-	log.WithField("directory", directory).Debug("Loading resources from embedded file system")
+	log.Debug().Field(
+		log.Field("directory", directory),
+	).Msg("Loading resources from embedded file system")
 	return loaderInstance.loadFromFs(directory, fs)
 }
 
@@ -35,7 +38,9 @@ func Get[T any](path Path) T {
 	var result T
 	value, ok := loaderInstance.resources[path]
 	if !ok {
-		log.Error("Attempted to load resource, which was unavailable: ", path)
+		log.Error().
+			Msgf("Attempted to load resource, which was unavailable: %s", path)
+
 		return result
 	}
 	return value.instance.(T)

@@ -2,12 +2,13 @@ package clay
 
 import (
 	"cmp"
-	"github.com/leap-fish/clay/pkg/render"
-	log "github.com/sirupsen/logrus"
-	"github.com/yohamta/donburi"
 	"reflect"
 	"slices"
 	"time"
+
+	log "github.com/leap-fish/clay/pkg/logger"
+	"github.com/leap-fish/clay/pkg/render"
+	"github.com/yohamta/donburi"
 )
 
 type SubSystem interface{}
@@ -68,7 +69,7 @@ func (sr *SubSystemRegistry) Add(systems []SubSystem) {
 			sr.Initializables = append(sr.Initializables, initializable)
 			sr.Initializables = sortSubSystemSlice(sr.Initializables)
 		}
-		
+
 		renderable, canRender := system.(Renderable)
 		if canRender {
 			sr.Renderables = append(sr.Renderables, renderable)
@@ -85,10 +86,13 @@ func (sr *SubSystemRegistry) Add(systems []SubSystem) {
 		sr.SubSystems = append(sr.SubSystems, system)
 		sr.SubSystems = sortSubSystemSlice(sr.SubSystems)
 
-		log.
-			WithField("canInit", canInit).
-			WithField("canRender", canRender).
-			WithField("canUpdate", canUpdate).
-			Tracef("Registered subsystem %s", reflect.TypeOf(system))
+		log.Trace().
+			Caller().
+			Field(
+				log.Field("canInit", canInit),
+				log.Field("canRender", canRender),
+				log.Field("canUpdate", canUpdate),
+			).
+			Msgf("Registered subsystem %s", reflect.TypeOf(system))
 	}
 }

@@ -1,13 +1,14 @@
 package render
 
 import (
+	"sort"
+
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/leap-fish/clay/pkg/components/camera"
+	log "github.com/leap-fish/clay/pkg/logger"
 	"github.com/leap-fish/clay/pkg/util/ecsutil"
-	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
-	"sort"
 )
 
 type DrawFunction func(world donburi.World, screen *ebiten.Image, camera *camera.Camera)
@@ -47,14 +48,19 @@ func (rg *RenderGraph) Render(screen *ebiten.Image, w donburi.World) {
 	// Displays a message to the consumer telling them to add the camera to the world.
 	gameCamera := ecsutil.FirstOf[camera.Camera](camera.Component, w)
 	if gameCamera == nil {
-		ebitenutil.DebugPrintAt(screen, "NO CAMERA IS PRESENT\n> Add a camera to the ECS world.", 10, 10)
+		ebitenutil.DebugPrintAt(
+			screen,
+			"NO CAMERA IS PRESENT\n> Add a camera to the ECS world.",
+			10,
+			10,
+		)
 		return
 	}
 
 	// For every item in the queue, we can run the draw function.
 	for _, item := range rg.queue {
 		if item.drawFunction == nil {
-			log.Panic("No draw function")
+			log.Panic().Caller().Msg("No draw function")
 			return
 		}
 		item.drawFunction(w, screen, gameCamera)

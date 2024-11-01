@@ -2,9 +2,10 @@ package clay
 
 import (
 	"cmp"
-	log "github.com/sirupsen/logrus"
 	"reflect"
 	"slices"
+
+	log "github.com/leap-fish/clay/pkg/logger"
 )
 
 type PluginRegistry struct {
@@ -27,7 +28,9 @@ func (pr *PluginRegistry) Add(plugin []Plugin) {
 			continue
 		}
 
-		log.Tracef("Add plugin %s", pluginType)
+		log.Trace().
+			Caller().
+			Msgf("Add plugin %s", pluginType)
 		pr.pluginTypes = append(pr.pluginTypes, pluginType)
 		pr.Plugins = append(pr.Plugins, m)
 	}

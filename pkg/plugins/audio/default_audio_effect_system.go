@@ -1,17 +1,20 @@
 package audio
 
 import (
+	"time"
+
 	eaudio "github.com/hajimehoshi/ebiten/v2/audio"
 	"github.com/leap-fish/clay/pkg/components/audio"
+	log "github.com/leap-fish/clay/pkg/logger"
 	"github.com/leap-fish/clay/pkg/resource"
-	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/filter"
-	"time"
 )
 
-const bytesPerAudioSample = 4
-const sampleRate = 48_000
+const (
+	bytesPerAudioSample = 4
+	sampleRate          = 48_000
+)
 
 type SoundBytes []byte
 
@@ -55,13 +58,15 @@ func (d *DefaultAudioEffectSystem) Update(w donburi.World, dt time.Duration) {
 		// Start playing if it isn't.
 		if !sfx.Player.IsPlaying() && sfx.Player.Position() == 0 {
 			_ = sfx.Player.SetPosition(0)
-			log.
-				WithField("streamBytesLen", len(streamBytes)).
-				WithField("volume", sfx.Player.Volume()).
-				WithField("totalLength", total).
-				Tracef("Playing audio at path %s", sfx.Path)
+			log.Trace().
+				Caller().
+				Field(
+					log.Field("streamBytesLen", len(streamBytes)),
+					log.Field("volume", sfx.Player.Volume()),
+					log.Field("totalLength", total),
+				).
+				Msgf("Playing audio at path %s", sfx.Path)
 			sfx.Player.Play()
 		}
-
 	})
 }

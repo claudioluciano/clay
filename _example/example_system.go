@@ -3,6 +3,9 @@ package _example
 import (
 	"bytes"
 	"fmt"
+	"image/color"
+	"time"
+
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
 	"github.com/leap-fish/clay/pkg/bundle"
@@ -12,15 +15,13 @@ import (
 	"github.com/leap-fish/clay/pkg/components/sprite"
 	txt "github.com/leap-fish/clay/pkg/components/text"
 	"github.com/leap-fish/clay/pkg/events"
+	log "github.com/leap-fish/clay/pkg/logger"
 	"github.com/leap-fish/clay/pkg/render"
 	"github.com/leap-fish/clay/pkg/util/ecsutil"
-	log "github.com/sirupsen/logrus"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/features/debug"
 	"github.com/yohamta/donburi/features/math"
 	"github.com/yohamta/donburi/filter"
-	"image/color"
-	"time"
 )
 
 var DebugMarker = donburi.NewTag("DebugMarker")
@@ -54,7 +55,17 @@ func (e *ExampleSystem) Update(w donburi.World, dt time.Duration) {
 
 	t := txt.Component.Get(entry)
 	t.Content.Reset()
-	t.Content.WriteString(fmt.Sprintf("%0.1f FPS, %0.1f TPS\n\n%dx%d (world: %#v)\n\nCamera pos: %#v\n\n", ebiten.ActualFPS(), ebiten.ActualTPS(), x, y, worldPos, cam.Position))
+	t.Content.WriteString(
+		fmt.Sprintf(
+			"%0.1f FPS, %0.1f TPS\n\n%dx%d (world: %#v)\n\nCamera pos: %#v\n\n",
+			ebiten.ActualFPS(),
+			ebiten.ActualTPS(),
+			x,
+			y,
+			worldPos,
+			cam.Position,
+		),
+	)
 	for _, c := range debug.GetEntityCounts(w) {
 		t.Content.WriteString(fmt.Sprintf("> %s\n", c.String()))
 	}
@@ -62,13 +73,18 @@ func (e *ExampleSystem) Update(w donburi.World, dt time.Duration) {
 
 func (e *ExampleSystem) Init(w donburi.World) {
 	events.ResourcePluginLoaded.Subscribe(w, func(w donburi.World, event int) {
-		log.Info("Spawning spritesheet")
-		var spriteSheet = bundle.New().
+		log.Info().Msg("Spawning spritesheet")
+		spriteSheet := bundle.New().
 			With(spatial.TransformComponent, spatial.Transform{Scale: 5.0, Position: math.NewVec2(20, 20)}).
 			With(animsprite.Component, animsprite.New(
 				"image:spritesheet",
 				"idle",
-				animsprite.SpriteSheetSize{FrameHeight: 32, FrameWidth: 32, ImageWidth: 416, ImageHeight: 256},
+				animsprite.SpriteSheetSize{
+					FrameHeight: 32,
+					FrameWidth:  32,
+					ImageWidth:  416,
+					ImageHeight: 256,
+				},
 				map[string]*animsprite.Animation{
 					"idle": animsprite.NewAnimation(time.Millisecond*120, "1-13", 1),
 					"run":  animsprite.NewAnimation(time.Millisecond*50, "1-8", 2),
@@ -117,9 +133,7 @@ func (e *ExampleSystem) Init(w donburi.World) {
 		With(DebugMarker, donburi.Tag("DebugMarker"))
 
 	secondText.Spawn(w)
-
 }
 
 func (e *ExampleSystem) Render(rg *render.RenderGraph, w donburi.World) {
-
 }
